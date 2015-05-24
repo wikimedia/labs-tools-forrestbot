@@ -4,10 +4,9 @@ See https://etherpad.wikimedia.org/p/T280 / https://phabricator.wikimedia.org/T2
 __author__ = 'Merlijn van Deen'
 
 import functools
+import itertools
 
 import logging
-logging.basicConfig(level=logging.DEBUG)
-
 logger = logging.getLogger('forrestbot')
 
 import gerrit_rest
@@ -22,6 +21,7 @@ phab = legophab.Phabricator(
 
 @functools.lru_cache()
 def get_master_branches():
+    logging.debug("Requesting 'master' branches")
     gerrit = gerrit_rest.GerritREST("https://gerrit.wikimedia.org/r")
     projbranches = gerrit.branches("mediawiki%2Fcore")
 
@@ -31,19 +31,31 @@ def get_master_branches():
     newest_wmf = sorted([b for b in projbranches if marker in b])[-1]
     newest_wmf = newest_wmf.split(marker)[1]
 
+    wmf_parts = newest_wmf.split("wmf")
+    next_wmf = wmf_parts[0] + "wmf" + str(int(wmf_parts[1]) + 1)
+
     def REL_key(REL):
         major, minor = REL.split("REL")[1].split("_")
         return int(major), int(minor)
 
     marker = 'refs/heads/REL'
     newest_REL = sorted([b for b in projbranches if marker in b], key=REL_key)[-1]
-    newest_REL = newest_REL.split('refs/heads/')[1]
+    newest_REL = newest_REL.split(marker)[1]
 
-    return [newest_REL, newest_wmf]
+    REL_parts = newest_REL.split("_")
+    next_REL = "REL" + REL_parts[0] + "_" + str(int(REL_parts[1])+1)
 
-print(get_master_branches())
-print(get_master_branches())
+    return [next_REL, next_wmf]
 
+@functools.lru_cache()
+def get_slug_PHID(slug):
+    rq = list(phab.request('project.query', {'slugs': [slug]})['slugMap'].values())
+    if rq:
+        logging.debug("Slug {slug} = PHID {phid}".format(slug=slug, phid=rq[0]))
+        return rq[0]
+    else:
+        logger.warning("No PHID found for slug #%s!" % slug)
+        return None
 
 def get_slug(branch):
     """ Slugify the branch name.
@@ -59,6 +71,9 @@ def get_slug(branch):
         return "mw%s.%s" % (major, minor)
     elif "wmf" in branch:
         return 'mw'+branch
+    else:
+        logging.debug('Unknown branch type %s, returning None' % branch)
+        return None
 
 def slugify(taskbranches):
     """ Slugify all branches
@@ -68,25 +83,23 @@ def slugify(taskbranches):
     """
 
     slugs = [get_slug(b) for b in taskbranches]
-
-testmail = {'X-Gerrit-Change-Id': 'I650cd2615ebac862e1b5fcff3707f4caf7f56944',
-                         'X-Gerrit-MessageType': 'merged',
-                         'X-Gerrit-Branch': '1.23wmf6',
-                         'Bug': 'T1152'}
-
+    return [s for s in slugs if s]
 
 class SkipMailException(Exception):
     pass
 
 def process_mail(mail):
+    proj = mail.get('Gerrit-Project', '')
+    if proj != 'mediawiki/core':
+        raise SkipMailException("Project %s is not mediawiki/core" % (proj,))
     if mail.get('X-Gerrit-MessageType', '') != 'merged':
         raise SkipMailException('Not a merge email')
 
     try:
-        taskbranches = mail['X-Gerrit-Branch']
+        taskbranches = [mail['Gerrit-Branch']]
         task = mail.get('Bug', '') or mail.get('Closes', '')
         if not task:
-            raise KeyError
+            raise KeyError('No Task ID (Bug or Closes)')
     except KeyError as e:
         raise SkipMailException(e)
 
@@ -94,23 +107,70 @@ def process_mail(mail):
         taskbranches =  get_master_branches()
 
     slugs = slugify(taskbranches)
-    project_PHIDs = phab.request('project.query', {'slugs': slugs})['slugMap'].values()
 
-    try:
-        existing_projects = phab.request('maniphest.info', {'task_id': task})['projectPHIDs']
-    except PhabricatorException as e:
-        if e.code == 'ERR_BAD_TASK':
-            logging.verbose('Task %s does not exist!' % task)
-            raise SkipMailException(e)
-
-    phab.request('maniphest.update', {'id': '1152', 'projectPHIDs': project_PHIDs})
-
-
+    return {
+        'url': mail['X-Gerrit-ChangeURL'][1:-1],
+        'branch': mail['Gerrit-Branch'],
+        'task': task,
+        'slugs': slugs,
+    }
 
 # query projects
 
+if __name__=="__main__":
+    logging.basicConfig(level=logging.INFO)
 
-#import pop3bot
+    logger.info("Current master branches are: %r" % (get_master_branches(),))
 
-#mailbox = pop3bot.mkmailbox()
-#for mail in pop3bot.gerritmail_generator():
+    import pop3bot
+    mailbox = pop3bot.mkmailbox()
+
+    nmails, octets = mailbox.stat()
+
+    logger.info("%i e-mails to process (%i kB)" % (nmails, octets/1024))
+
+    actions = []
+
+    for i,mail in enumerate(pop3bot.gerritmail_generator(mailbox)):
+        try:
+            action = process_mail(mail)
+            actions.append(action)
+            logger.info("{url}: merged in branch {branch}, Task {task}, needs slugs {slugs}".format(**action))
+        except SkipMailException as e:
+            logger.debug("%s: skipping (%r)" % (mail['X-Gerrit-ChangeURL'], e))
+            pass
+
+    # after parsing all entries, make sure we only do a single edit per Task.
+    key = lambda x: int(x['task'][1:])
+    for task, acts in itertools.groupby(sorted(actions, key=key), key=key):
+        acts = sorted(acts, key=lambda x: x['slugs'])
+
+        add_PHIDs = set()
+        message = ""
+
+        # build message and changes
+        for act in acts:
+            slugstr = ", ".join("#" + slug for slug in act['slugs'])
+            message += "* {url} (branch {branch}): {slugstr}\n".format(
+                url=act['url'], branch=act['branch'], slugstr=slugstr
+            )
+            for slug in act['slugs']:
+                add_PHIDs.add(get_slug_PHID(slug))
+
+        logger.info("Adding PHID {PHIDs} to T{task}.".format(PHIDs=add_PHIDs, task=task))
+
+        # now we get the task to know what the existing tags are
+        task_info = phab.request('maniphest.info', {'task_id': str(task)})
+        old_projs = set(task_info['projectPHIDs'])
+        logger.debug("Existing PHIDs: {old_projs}".format(old_projs=old_projs))
+        new_projs = set(task_info['projectPHIDs']) | add_PHIDs
+        if old_projs != new_projs:
+            phab.request('maniphest.update', {'id': str(task),
+                                              'projectPHIDs': list(new_projs),
+                                              'comments': message
+                                              }
+                         )
+        else:
+            logging.info("Skipping T{task}; no new projects to add".format(task=task))
+
+    mailbox.quit()

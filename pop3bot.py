@@ -28,13 +28,18 @@ def message_generator(mailbox):
     p = email.parser.Parser()
     for mail in mail_generator(mailbox):
         mail = p.parsestr(mail)
-        yield mail, mail.get_payload(decode=True)
+        payload = mail.get_payload(decode=True)
+        if not payload:
+            logger.debug("email from %s does not have payload" % mail['From'])
+            continue
+        yield mail, payload.decode('utf-8', 'replace')
 
 def gerritmail_generator(mailbox):
     for message, contents in message_generator(mailbox):
         if 'gerrit@wikimedia.org' not in message.get('From', ''):
+            logger.debug('Skipping message from %s' % message.get('From', '???'))
             continue
-        print(repr(message.items()), repr(contents))
+
         gerrit_data = dict((k,v) for (k,v) in message.items() if k.startswith('X-Gerrit'))
         gerrit_data.update(dict(
             line.split(": ", 1)

@@ -43,7 +43,7 @@ class Phabricator(object):
         })
 
         # Parse out the response (error handling ommitted)
-        result = json.loads(req.content)['result']
+        result = req.json()['result']
         self.session = {
             'sessionKey': result['sessionKey'],
             'connectionID': result['connectionID'],
@@ -59,7 +59,7 @@ class Phabricator(object):
             'params': json.dumps(params),
             'output': 'json',
         })
-        res = json.loads(req.content)
+        res = req.json()
         logger.debug('Received %r' % res)
         if res['error_code']:
             raise PhabricatorException(res['error_code'], res['error_info'])
