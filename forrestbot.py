@@ -10,7 +10,7 @@ import logging
 logger = logging.getLogger('forrestbot')
 
 import gerrit_rest
-import legophab
+import phabricator as legophab
 import config
 
 phab = legophab.Phabricator(
