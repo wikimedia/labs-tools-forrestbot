@@ -163,6 +163,10 @@ if __name__=="__main__":
 
         # now we get the task to know what the existing tags are
         task_info = phab.request('maniphest.info', {'task_id': str(task)})
+        if not task_info:
+            # Security bug? T101133
+            logger.warning('Unable to get information about T{task}, maybe it is private?'.format(task=task))
+            continue
         old_projs = set(task_info['projectPHIDs'])
         logger.debug("Existing PHIDs: {old_projs}".format(old_projs=old_projs))
         new_projs = set(task_info['projectPHIDs']) | add_PHIDs
