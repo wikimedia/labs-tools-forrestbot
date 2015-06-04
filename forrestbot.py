@@ -5,6 +5,7 @@ __author__ = 'Merlijn van Deen'
 
 import functools
 import itertools
+import requests
 
 import logging
 logger = logging.getLogger('forrestbot')
@@ -20,10 +21,11 @@ phab = legophab.Phabricator(
         )
 
 @functools.lru_cache()
-def get_master_branches():
+def get_master_branches(repository):
     logging.debug("Requesting 'master' branches")
     gerrit = gerrit_rest.GerritREST("https://gerrit.wikimedia.org/r")
-    projbranches = gerrit.branches("mediawiki%2Fcore")
+    silly_encoded_name = repository.replace('/', '%2F')  # wtf gerrit
+    projbranches = gerrit.branches(silly_encoded_name)
 
     projbranches = [b['ref'] for b in projbranches]
 
@@ -33,6 +35,10 @@ def get_master_branches():
 
     wmf_parts = newest_wmf.split("wmf")
     next_wmf = wmf_parts[0] + "wmf" + str(int(wmf_parts[1]) + 1)
+    if repository != 'mediawiki/core':
+        # Only do REL1_XX branches for MediaWiki core, since WMF-deployed extensions
+        # are not the same as those that are bundled inside the tarball.
+        return [next_wmf]
 
     def REL_key(REL):
         major, minor = REL.split("REL")[1].split("_")
@@ -46,6 +52,19 @@ def get_master_branches():
     next_REL = "REL" + REL_parts[0] + "_" + str(int(REL_parts[1])+1)
 
     return [next_REL, next_wmf]
+
+@functools.lru_cache()
+def get_repos_to_watch():
+    # This url will redirect like 3 times, but requests handles it nicely
+    r = requests.get('https://phabricator.wikimedia.org/diffusion/MREL/browse/master/make-wmf-branch/config.json?view=raw')
+    conf = r.json()
+    repos = ['mediawiki/core']
+    for ext in conf['extensions']:
+        repos.append('mediawiki/extensions/' + ext)
+    for skin in conf['skins']:
+        repos.append('mediawiki/skins/' + skin)
+    # Intentionally ignore special_extensions because they're special
+    return repos
 
 @functools.lru_cache()
 def get_slug_PHID(slug):
@@ -92,8 +111,8 @@ class SkipMailException(Exception):
 
 def process_mail(mail):
     proj = mail.get('Gerrit-Project', '')
-    if proj != 'mediawiki/core':
-        raise SkipMailException("Project %s is not mediawiki/core" % (proj,))
+    if proj not in get_repos_to_watch():
+        raise SkipMailException("Project %s is not being watched" % proj)
     if mail.get('X-Gerrit-MessageType', '') != 'merged':
         raise SkipMailException('Not a merge email')
 
@@ -106,7 +125,14 @@ def process_mail(mail):
         raise SkipMailException(e)
 
     if taskbranches == ['master']:
-        taskbranches =  get_master_branches()
+        taskbranches = get_master_branches(proj)
+
+    if proj != 'mediawiki/core':
+        # Remove any REL1_XX branches for now since we don't know if it is
+        # included in the tarball.
+        for taskbranch in taskbranches[:]:
+            if taskbranch.startswith('REL'):
+                taskbranches.remove(taskbranch)
 
     slugs = slugify(taskbranches)
 
@@ -122,7 +148,7 @@ def process_mail(mail):
 if __name__=="__main__":
     logging.basicConfig(level=logging.INFO)
 
-    logger.info("Current master branches are: %r" % (get_master_branches(),))
+    # logger.info("Current master branches are: %r" % (get_master_branches(),))
 
     import pop3bot
     mailbox = pop3bot.mkmailbox()
