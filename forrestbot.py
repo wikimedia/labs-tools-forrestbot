@@ -68,15 +68,11 @@ def get_repos_to_watch():
 
 @functools.lru_cache()
 def get_slug_PHID(slug):
-    try:
-        rq = list(phab.request('project.query', {'slugs': [slug]})['slugMap'].values())
-        if rq:
-            logging.debug("Slug {slug} = PHID {phid}".format(slug=slug, phid=rq[0]))
-            return rq[0]
-    except:
-        pass
-    logger.warning("No PHID found for slug #%s!" % slug)
-    return None
+    rq = list(phab.request('project.query', {'slugs': [slug]})['slugMap'].values())
+    if rq:
+        logging.debug("Slug {slug} = PHID {phid}".format(slug=slug, phid=rq[0]))
+        return rq[0]
+    raise Exception("No PHID found for slug #%s!" % slug)
 
 def get_slug(branch):
     """ Slugify the branch name.
