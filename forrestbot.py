@@ -88,7 +88,7 @@ def get_slug(branch):
         major, minor = branch.split("REL")[1].split("_")
         return "mw%s.%s" % (major, minor)
     elif branch.startswith('wmf/'):
-        return 'mw' + branch[:4]
+        return 'mw' + branch[4:]
     elif "wmf" in branch:
         return 'mw'+branch
     else:
