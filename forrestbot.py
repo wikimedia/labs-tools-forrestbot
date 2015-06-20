@@ -29,9 +29,12 @@ def get_master_branches(repository):
 
     projbranches = [b['ref'] for b in projbranches]
 
+    def wmf_number(branchname):
+        parts = branchname.split("wmf")
+        return int(parts[1])
+
     marker = 'refs/heads/wmf/'
-    newest_wmf = sorted([b for b in projbranches if marker in b])[-1]
-    newest_wmf = newest_wmf.split(marker)[1]
+    newest_wmf = sorted([b.split(marker)[1] for b in projbranches if marker in b], key=wmf_number)[-1]
 
     wmf_parts = newest_wmf.split("wmf")
     next_wmf = wmf_parts[0] + "wmf" + str(int(wmf_parts[1]) + 1)
