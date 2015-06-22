@@ -31,10 +31,10 @@ def get_master_branches(repository):
 
     def wmf_number(branchname):
         """
-        'wmf10' -> 10
-        'wmf8' -> 8
+        '1.26wmf10' -> 10
+        '1.25wmf8' -> 8
         """
-        return int(branchname[3:])
+        return int(branchname[7:])
 
     marker = 'refs/heads/wmf/'
     newest_wmf = sorted([b.split(marker)[1] for b in projbranches if marker in b], key=wmf_number)[-1]
