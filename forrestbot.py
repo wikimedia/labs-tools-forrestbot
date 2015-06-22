@@ -19,11 +19,11 @@ phab = legophab.Phabricator(
             config.PHAB_USER,
             config.PHAB_CERT
         )
+gerrit = gerrit_rest.GerritREST("https://gerrit.wikimedia.org/r")
 
 @functools.lru_cache()
 def get_master_branches(repository):
     logging.debug("Requesting 'master' branches")
-    gerrit = gerrit_rest.GerritREST("https://gerrit.wikimedia.org/r")
     silly_encoded_name = repository.replace('/', '%2F')  # wtf gerrit
     projbranches = gerrit.branches(silly_encoded_name)
 
