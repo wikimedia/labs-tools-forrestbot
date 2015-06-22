@@ -48,7 +48,7 @@ def get_master_branches(repository):
 
     marker = 'refs/heads/wmf/'
     newest_wmf = sorted([b.split(marker)[1] for b in projbranches
-                         if (marker in b and wmf_number(b))],
+                         if (marker in b and wmf_number(b.split(marker)[1]))],
                         key=wmf_number)[-1]
 
     wmf_parts = newest_wmf.split("wmf")
