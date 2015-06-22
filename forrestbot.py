@@ -31,14 +31,20 @@ def get_master_branches(repository):
 
     def wmf_number(branchname):
         """
-        '1.26wmf10' -> 10
-        '1.25wmf8' -> 8
+        '1.26wmf10' -> 12610
+        '1.25wmf8' -> 12508
         '1.26wmf3-back' -> False # wtf Gather??
         """
+        major, minor = branchname.split('wmf', 1)
+        major = major.replace('.', '')
         try:
-            return int(branchname[7:])
+            int(minor)
         except ValueError:
             return False
+        if len(minor) == 1:
+            minor = '0' + minor
+
+        return int(major + minor)
 
     marker = 'refs/heads/wmf/'
     newest_wmf = sorted([b.split(marker)[1] for b in projbranches
