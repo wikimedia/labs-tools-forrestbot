@@ -191,14 +191,9 @@ if __name__=="__main__":
         acts = sorted(acts, key=lambda x: x['slugs'])
 
         add_PHIDs = set()
-        message = ""
 
-        # build message and changes
+        # build changes
         for act in acts:
-            slugstr = ", ".join("#" + slug for slug in act['slugs'])
-            message += "* {url} (branch {branch}): {slugstr}\n".format(
-                url=act['url'], branch=act['branch'], slugstr=slugstr
-            )
             for slug in act['slugs']:
                 add_PHIDs.add(get_slug_PHID(slug))
 
@@ -216,7 +211,6 @@ if __name__=="__main__":
         if old_projs != new_projs:
             phab.request('maniphest.update', {'id': str(task),
                                               'projectPHIDs': list(new_projs),
-                                              'comments': message
                                               }
                          )
         else:
