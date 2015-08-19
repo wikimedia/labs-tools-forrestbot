@@ -23,7 +23,7 @@ gerrit = gerrit_rest.GerritREST("https://gerrit.wikimedia.org/r")
 
 @functools.lru_cache()
 def get_master_branches(repository):
-    logging.debug("Requesting 'master' branches")
+    logging.debug("Requesting 'master' branches for %s" % repository)
     silly_encoded_name = repository.replace('/', '%2F')  # wtf gerrit
     projbranches = gerrit.branches(silly_encoded_name)
 
@@ -31,11 +31,15 @@ def get_master_branches(repository):
 
     def wmf_number(branchname):
         """
-        '1.26wmf10' -> 12610
-        '1.25wmf8' -> 12508
-        '1.26wmf3-back' -> False # wtf Gather??
+        'wmf/1.26wmf10' -> 12610
+        'wmf/1.25wmf8' -> 12508
+        'wmf/1.26wmf3-back' -> False # wtf Gather??
+        'wmf/phase0' -> False # wtf??
         """
-        major, minor = branchname.split('wmf', 1)
+        try:
+            major, minor = branchname.split('wmf', 1)
+        except ValueError:
+            return False
         major = major.replace('.', '')
         try:
             int(minor)
