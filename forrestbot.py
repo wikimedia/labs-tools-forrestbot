@@ -190,7 +190,8 @@ if __name__=="__main__":
             pass
 
     # after parsing all entries, make sure we only do a single edit per Task.
-    key = lambda x: int(x['task'][1:])
+    # When detecting the bug header, strip arbitrary whitespace so bad headers like "Bug:  T###" are ok
+    key = lambda x: int(x['task'].strip()[1:])
     for task, acts in itertools.groupby(sorted(actions, key=key), key=key):
         acts = sorted(acts, key=lambda x: x['slugs'])
 
