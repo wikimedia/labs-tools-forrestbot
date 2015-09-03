@@ -167,7 +167,7 @@ def process_mail(mail):
 # query projects
 
 if __name__=="__main__":
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s: %(levelname)-8s – %(message)s')
 
     # logger.info("Current master branches are: %r" % (get_master_branches(),))
 
