@@ -45,7 +45,7 @@ def gerritmail_generator(mailbox):
             line.split(": ", 1)
             for line in contents.split('\n')
             if (
-                line.startswith("Gerrit-") or line.startswith('Bug:') or line.startswith('Closes:')
+                line.startswith("Gerrit-") or line.startswith('Bug:') or line.startswith('Task:') or line.startswith('Closes:')
             ) and (
                 ": " in line
             )
