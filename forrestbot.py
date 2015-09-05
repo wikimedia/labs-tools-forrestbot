@@ -139,9 +139,9 @@ def process_mail(mail):
 
     try:
         taskbranches = [mail['Gerrit-Branch']]
-        task = mail.get('Bug', '') or mail.get('Closes', '')
+        task = mail.get('Bug', '') or mail.get('Closes', '') or mail.get('Task', '')
         if not task:
-            raise KeyError('No Task ID (Bug or Closes)')
+            raise KeyError('No Task ID (Bug, Closes or Task)')
     except KeyError as e:
         raise SkipMailException(e)
 
