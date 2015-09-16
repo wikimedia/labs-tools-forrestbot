@@ -13,6 +13,7 @@ logger = logging.getLogger('forrestbot')
 import gerrit_rest
 import phabricator as legophab
 import config
+from utils import wmf_number
 
 phab = legophab.Phabricator(
             config.PHAB_HOST,
@@ -21,6 +22,7 @@ phab = legophab.Phabricator(
         )
 gerrit = gerrit_rest.GerritREST("https://gerrit.wikimedia.org/r")
 
+
 @functools.lru_cache()
 def get_master_branches(repository):
     logging.debug("Requesting 'master' branches for %s" % repository)
@@ -28,27 +30,6 @@ def get_master_branches(repository):
     projbranches = gerrit.branches(silly_encoded_name)
 
     projbranches = [b['ref'] for b in projbranches]
-
-    def wmf_number(branchname):
-        """
-        'wmf/1.26wmf10' -> 12610
-        'wmf/1.25wmf8' -> 12508
-        'wmf/1.26wmf3-back' -> False # wtf Gather??
-        'wmf/phase0' -> False # wtf??
-        """
-        try:
-            major, minor = branchname.split('wmf', 1)
-        except ValueError:
-            return False
-        major = major.replace('.', '')
-        try:
-            int(minor)
-        except ValueError:
-            return False
-        if len(minor) == 1:
-            minor = '0' + minor
-
-        return int(major + minor)
 
     marker = 'refs/heads/wmf/'
     newest_wmf = sorted([b.split(marker)[1] for b in projbranches
