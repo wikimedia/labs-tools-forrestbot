@@ -36,4 +36,3 @@ def wmf_number(branchname):
         minor = '0' + minor
 
     return int(major + minor)
-
