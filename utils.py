@@ -1,7 +1,11 @@
 def wmf_number(branchname):
     """
+    >>> wmf_number('1.27.0-wmf.21')
+    12721
     >>> wmf_number('1.27.0-wmf21')
     12721
+    >>> wmf_number('1.27.0-wmf.1')
+    12701
     >>> wmf_number('1.27.0-wmf1')
     12701
     >>> wmf_number('1.26wmf10')
