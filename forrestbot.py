@@ -189,8 +189,8 @@ if __name__ == "__main__":
             action = process_mail(mail)
             actions.append(action)
             logger.info(
-                "{url}: merged in branch {branch}, Task {task},"
-                + " needs slugs {slugs}".format(**action)
+                ("{url}: merged in branch {branch}, Task {task},"
+                 + " needs slugs {slugs}").format(**action)
             )
         except SkipMailException as e:
             logger.debug("%s: skipping (%r)" % (mail['X-Gerrit-ChangeURL'], e))
@@ -219,8 +219,8 @@ if __name__ == "__main__":
         if not task_info:
             # Security bug? T101133
             logger.warning(
-                'Unable to get information about T{task}, maybe it is'
-                + ' private?'.format(task=task)
+                ('Unable to get information about T{task}, maybe it is'
+                 + ' private?').format(task=task)
             )
             continue
         old_projs = set(task_info['projectPHIDs'])
