@@ -37,6 +37,7 @@ def get_master_branches(repository):
                         key=wmf_number)[-1]
 
     wmf_parts = newest_wmf.split("wmf")
+    wmf_parts = wmf_parts.replace('.', '')
     next_wmf = wmf_parts[0] + "wmf" + str(int(wmf_parts[1]) + 1)
     if repository != 'mediawiki/core':
         # Only do REL1_XX branches for MediaWiki core, since WMF-deployed
