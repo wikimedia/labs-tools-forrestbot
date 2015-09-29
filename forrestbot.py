@@ -97,6 +97,7 @@ def get_slug(branch):
     REL1_23 --> mw1.23
     1.23wmf6 -> mw1.23wmf6
     wmf/1.26wmf9 -> mw1.26wmf9
+    wmf/1.27.0-wmf.1 -> mw1.27.0-wmf1
 
     :param branch: Branch name
     :return: Slugified branch name
