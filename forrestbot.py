@@ -80,9 +80,15 @@ def get_repos_to_watch():
 
 @functools.lru_cache()
 def get_slug_PHID(slug):
-    rq = list(
-        phab.request('project.query', {'slugs': [slug]})['slugMap'].values()
-    )
+    try:
+        rq = list(
+            phab.request('project.query', {'slugs': [slug]})['slugMap']
+                .values()
+        )
+    except AttributeError:
+        # If slugMap is empty, an empty list rather than an empty dict is
+        # returned by Phabricator.
+        raise Exception("No PHID found for slug #%s!" % slug)
     if rq:
         logging.debug(
             "Slug {slug} = PHID {phid}".format(slug=slug, phid=rq[0])
