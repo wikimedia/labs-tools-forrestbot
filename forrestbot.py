@@ -1,19 +1,28 @@
 """
 https://etherpad.wikimedia.org/p/T280 & https://phabricator.wikimedia.org/T280
 """
-__author__ = 'Merlijn van Deen'
+__author__ = 'Merlijn van Deen'  # noqa
 
 import functools
 import itertools
 import requests
 
 import logging
-logger = logging.getLogger('forrestbot')
+from wblogging import LoggingSetupParser
 
 import gerrit_rest
 import phabricator as legophab
 import config
 from utils import wmf_number
+
+parser = LoggingSetupParser(
+    description="Process changesets and add release tags as required",
+)
+args = parser.parse_args()
+
+logging.getLogger('requests').setLevel(logging.INFO)
+logger = logging.getLogger('forrestbot')
+
 
 phab = legophab.Phabricator(
     config.PHAB_HOST,
@@ -65,8 +74,8 @@ def get_master_branches(repository):
 def get_repos_to_watch():
     # This url will redirect like 3 times, but requests handles it nicely
     r = requests.get(
-        'https://phabricator.wikimedia.org/diffusion/MREL/browse/master/'
-        + 'make-wmf-branch/config.json?view=raw'
+        'https://phabricator.wikimedia.org/diffusion/MREL/browse/master/' +
+        'make-wmf-branch/config.json?view=raw'
     )
     conf = r.json()
     repos = ['mediawiki/core']
@@ -197,8 +206,8 @@ if __name__ == "__main__":
             action = process_mail(mail)
             actions.append(action)
             logger.info(
-                ("{url}: merged in branch {branch}, Task {task},"
-                 + " needs slugs {slugs}").format(**action)
+                ("{url}: merged in branch {branch}, Task {task}," +
+                 " needs slugs {slugs}").format(**action)
             )
         except SkipMailException as e:
             logger.debug("%s: skipping (%r)" % (mail['X-Gerrit-ChangeURL'], e))
@@ -207,7 +216,9 @@ if __name__ == "__main__":
     # after parsing all entries, make sure we only do a single edit per Task.
     # When detecting the bug header, strip arbitrary whitespace so bad headers
     # like "Bug:  T###" are OK
-    key = lambda x: int(x['task'].strip()[1:])
+    def key(x):
+        return int(x['task'].strip()[1:])
+
     for task, acts in itertools.groupby(sorted(actions, key=key), key=key):
         acts = sorted(acts, key=lambda x: x['slugs'])
 
@@ -227,8 +238,8 @@ if __name__ == "__main__":
         if not task_info:
             # Security bug? T101133
             logger.warning(
-                ('Unable to get information about T{task}, maybe it is'
-                 + ' private?').format(task=task)
+                ('Unable to get information about T{task}, maybe it is' +
+                 ' private?').format(task=task)
             )
             continue
         old_projs = set(task_info['projectPHIDs'])
