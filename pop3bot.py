@@ -2,6 +2,8 @@ import poplib
 import email.parser
 import config
 import logging
+import gerrit_rest
+
 logger = logging.getLogger('pop3bot')
 
 
@@ -68,7 +70,6 @@ def gerritmail_generator(mailbox):
         if gerrit_data:
             yield gerrit_data
 
-import gerrit_rest
 g = gerrit_rest.GerritREST('https://gerrit.wikimedia.org/r')
 
 
