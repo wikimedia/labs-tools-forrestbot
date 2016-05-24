@@ -158,6 +158,7 @@ def process_mail(mail):
             mail.get('Closes', '') or
             mail.get('Task', '')
         )
+        task = task.split(':')[-1].strip()
         if not task:
             raise KeyError('No Task ID (Bug, Closes or Task)')
     except KeyError as e:
