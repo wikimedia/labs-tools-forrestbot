@@ -13,7 +13,7 @@ from wblogging import LoggingSetupParser
 import gerrit_rest
 import phabricator as legophab
 import config
-from utils import wmf_number
+from utils import wmf_number, parse_task_number
 
 parser = LoggingSetupParser(
     description="Process changesets and add release tags as required",
@@ -158,9 +158,10 @@ def process_mail(mail):
             mail.get('Closes', '') or
             mail.get('Task', '')
         )
-        task = task.split(':')[-1].strip()
+        task = task.strip()
         if not task:
             raise KeyError('No Task ID (Bug, Closes or Task)')
+        task = parse_task_number(task)
     except KeyError as e:
         raise SkipMailException(e)
 
@@ -215,10 +216,8 @@ if __name__ == "__main__":
             pass
 
     # after parsing all entries, make sure we only do a single edit per Task.
-    # When detecting the bug header, strip arbitrary whitespace so bad headers
-    # like "Bug:  T###" are OK
     def key(x):
-        return int(x['task'].strip()[1:])
+        return x['task']
 
     for task, acts in itertools.groupby(sorted(actions, key=key), key=key):
         acts = sorted(acts, key=lambda x: x['slugs'])
