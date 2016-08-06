@@ -25,8 +25,10 @@ def mail_generator(mailbox):
         and DELEtes them before the next mail is RETRieved """
     nmails, octets = mailbox.stat()
     for i in range(1, nmails+1):
+        # use TOP rather than REPR to stop gmail from hiding/deleting emails
+        # without explicit DELE
         yield "\n".join(
-            [x.decode('utf-8', 'replace') for x in mailbox.retr(i)[1]]
+            [x.decode('utf-8', 'replace') for x in mailbox.top(i, 1000)[1]]
         )
         mailbox.dele(i)
 
