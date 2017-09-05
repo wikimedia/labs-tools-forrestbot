@@ -48,26 +48,8 @@ def get_master_branches(repository):
     wmf_parts = newest_wmf.split("wmf")
     wmf_parts[1] = wmf_parts[1].replace('.', '')
     next_wmf = wmf_parts[0] + "wmf" + str(int(wmf_parts[1]) + 1)
-    if repository != 'mediawiki/core':
-        # Only do REL1_XX branches for MediaWiki core, since WMF-deployed
-        # extensions are not the same as those that are bundled inside the
-        # tarball.
-        return [next_wmf]
 
-    def REL_key(REL):
-        major, minor = REL.split("REL")[1].split("_")
-        return int(major), int(minor)
-
-    marker = 'refs/heads/REL'
-    newest_REL = sorted(
-        [b for b in projbranches if marker in b], key=REL_key
-    )[-1]
-    newest_REL = newest_REL.split(marker)[1]
-
-    REL_parts = newest_REL.split("_")
-    next_REL = "REL" + REL_parts[0] + "_" + str(int(REL_parts[1])+1)
-
-    return [next_REL, next_wmf]
+    return next_wmf
 
 
 @functools.lru_cache()
@@ -169,8 +151,8 @@ def process_mail(mail):
         taskbranches = get_master_branches(proj)
 
     if proj != 'mediawiki/core':
-        # Remove any REL1_XX branches for now since we don't know if it is
-        # included in the tarball.
+        # Remove any REL1_XX branches for now since we don't know if this
+        # extension is included in the tarball.
         for taskbranch in taskbranches[:]:
             if taskbranch.startswith('REL'):
                 taskbranches.remove(taskbranch)
