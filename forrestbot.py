@@ -49,7 +49,7 @@ def get_master_branches(repository):
     wmf_parts[1] = wmf_parts[1].replace('.', '')
     next_wmf = wmf_parts[0] + "wmf" + str(int(wmf_parts[1]) + 1)
 
-    return next_wmf
+    return [next_wmf]
 
 
 @functools.lru_cache()
