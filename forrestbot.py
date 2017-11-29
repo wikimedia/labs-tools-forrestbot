@@ -166,10 +166,8 @@ def process_mail(mail):
         'slugs': slugs,
     }
 
-# query projects
 
-
-if __name__ == "__main__":
+def main():
     logging.basicConfig(
         level=logging.INFO,
         format='%(asctime)s: %(levelname)-8s - %(message)s'
@@ -239,3 +237,11 @@ if __name__ == "__main__":
             )
 
     mailbox.quit()
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except Exception as e:
+        logger.exception("Releasetaggerbot crashed while processing messages")
+        raise
