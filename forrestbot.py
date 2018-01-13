@@ -62,9 +62,7 @@ def get_repos_to_watch():
     conf = r.json()
     repos = ['mediawiki/core']
     for ext in conf['extensions']:
-        repos.append('mediawiki/extensions/' + ext)
-    for skin in conf['skins']:
-        repos.append('mediawiki/skins/' + skin)
+        repos.append('mediawiki/' + ext)
     # Intentionally ignore special_extensions because they're special
     return repos
 
