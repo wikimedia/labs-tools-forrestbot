@@ -21,6 +21,8 @@ def wmf_number(branchname):
     False
     >>> wmf_number('1.27.2-wmf1') # only doing -wmf for .0
     False
+    >>> wmf_number('1.32.0-wmf.999')
+    False
     """
     try:
         major, minor = branchname.split('wmf', 1)
@@ -41,6 +43,10 @@ def wmf_number(branchname):
         return False
     if len(minor) == 1:
         minor = '0' + minor
+
+    if int(minor) > 900:
+        # Special test branch, ignore it.
+        return False
 
     return int(major + minor)
 
