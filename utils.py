@@ -1,4 +1,5 @@
 import re
+import logging
 
 
 def wmf_number(branchname):
@@ -97,3 +98,51 @@ def parse_task_number(bugstring):
     raise TaskParseException(
         "Could not parse bug string %r" % (bugstring, )
     )
+
+
+def get_slug(branch):
+    """ Slugify the branch name.
+
+    >>> get_slug("REL1_23")
+    'mw1.23'
+    >>> get_slug("1.23wmf6")
+    'mw1.23wmf6'
+    >>> get_slug("wmf/1.26wmf9")
+    'mw1.26wmf9'
+    >>> get_slug("wmf/1.27.0-wmf.1")
+    'mw1.27.0-wmf.1'
+    >>> get_slug("randombranch")
+    >>> get_slug("wmf/1.32.0-wmf.901")
+    >>> get_slug("wmf/1.32.0-wmf.999")
+    >>>
+
+    :param branch: Branch name
+    :return: Slugified branch name
+    """
+    if branch[:3] == "REL":
+        major, minor = branch.split("REL")[1].split("_")
+        return "mw%s.%s" % (major, minor)
+    elif branch.startswith('wmf/'):
+        if "-wmf." in branch:
+            version, minor = branch[4:].split("-wmf.")
+            if int(minor) > 900:
+                return None  # test branches
+            return "mw{}-wmf.{}".format(version, minor)
+        else:
+            return 'mw' + branch[4:]
+    elif "wmf" in branch:
+        return 'mw'+branch
+    else:
+        logging.debug('Unknown branch type %s, returning None' % branch)
+        return None
+
+
+def slugify(taskbranches):
+    """ Slugify all branches
+
+    :param taskbranches: list of branches
+    :return: list of slugs
+    """
+
+    slugs = [get_slug(b) for b in taskbranches]
+    return [s for s in slugs if s]

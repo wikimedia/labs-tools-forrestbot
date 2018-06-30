@@ -13,7 +13,7 @@ from wblogging import LoggingSetupParser
 import gerrit_rest
 import phabricator as legophab
 import config
-from utils import wmf_number, parse_task_number
+from utils import wmf_number, parse_task_number, slugify
 
 parser = LoggingSetupParser(
     description="Process changesets and add release tags as required",
@@ -84,40 +84,6 @@ def get_slug_PHID(slug):
         )
         return rq[0]
     raise Exception("No PHID found for slug #%s!" % slug)
-
-
-def get_slug(branch):
-    """ Slugify the branch name.
-
-    REL1_23 --> mw1.23
-    1.23wmf6 -> mw1.23wmf6
-    wmf/1.26wmf9 -> mw1.26wmf9
-    wmf/1.27.0-wmf.1 -> mw1.27.0-wmf1
-
-    :param branch: Branch name
-    :return: Slugified branch name
-    """
-    if branch[:3] == "REL":
-        major, minor = branch.split("REL")[1].split("_")
-        return "mw%s.%s" % (major, minor)
-    elif branch.startswith('wmf/'):
-        return 'mw' + branch[4:]
-    elif "wmf" in branch:
-        return 'mw'+branch
-    else:
-        logging.debug('Unknown branch type %s, returning None' % branch)
-        return None
-
-
-def slugify(taskbranches):
-    """ Slugify all branches
-
-    :param taskbranches: list of branches
-    :return: list of slugs
-    """
-
-    slugs = [get_slug(b) for b in taskbranches]
-    return [s for s in slugs if s]
 
 
 class SkipMailException(Exception):
