@@ -1,2 +1,2 @@
 # m h  dom mon dow   command
-  0 *  *   *   *     jsub -quiet -N forrestbot -mem 500M /data/project/forrestbot/venv/bin/python /data/project/forrestbot/forrestbot/forrestbot.py --logfile /data/project/forrestbot/forrestbot.log
+  0 *  *   *   *     jsub -quiet -N forrestbot -mem 500M /data/project/forrestbot/venv-py35-stretch/bin/python /data/project/forrestbot/forrestbot/forrestbot.py --logfile /data/project/forrestbot/forrestbot.log
