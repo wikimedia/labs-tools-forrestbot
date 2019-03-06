@@ -77,11 +77,11 @@ g = gerrit_rest.GerritREST('https://gerrit.wikimedia.org/r')
 
 
 def get_changeset(changeid, o=['CURRENT_REVISION', 'CURRENT_FILES']):
-        matchingchanges = g.changes(changeid, n=1, o=o)
-        if matchingchanges:
-            return matchingchanges[0]
-        else:
-            return None
+    matchingchanges = g.changes(changeid, n=1, o=o)
+    if matchingchanges:
+        return matchingchanges[0]
+    else:
+        return None
 
 
 if __name__ == "__main__":
