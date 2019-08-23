@@ -111,6 +111,7 @@ def process_mail(mail):
     except KeyError as e:
         raise SkipMailException(e)
 
+    logger.info("Processing " + mail['X-Gerrit-ChangeURL'][1:-1])
     if taskbranches == ['master']:
         taskbranches = get_master_branches(proj)
 
