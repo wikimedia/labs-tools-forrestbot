@@ -1,2 +1,3 @@
 requests==2.7.0
 fab==1.4.2
+wikimediaci-utils==1.0.0

@@ -5,13 +5,13 @@ __author__ = 'Merlijn van Deen'  # noqa
 
 import functools
 import itertools
-import requests
 
 import logging
 from wblogging import LoggingSetupParser
 
 import gerrit_rest
 import phabricator as legophab
+import wikimediaci_utils
 import config
 from utils import wmf_number, parse_task_number, slugify
 
@@ -52,18 +52,9 @@ def get_master_branches(repository):
     return [next_wmf]
 
 
-@functools.lru_cache()
 def get_repos_to_watch():
-    # This url will redirect like 3 times, but requests handles it nicely
-    r = requests.get(
-        'https://phabricator.wikimedia.org/diffusion/MREL/browse/master/' +
-        'make-wmf-branch/config.json?view=raw'
-    )
-    conf = r.json()
     repos = ['mediawiki/core']
-    for ext in conf['extensions']:
-        repos.append('mediawiki/' + ext)
-    # Intentionally ignore special_extensions because they're special
+    repos.extend(wikimediaci_utils.get_wikimedia_deployed_list())
     return repos
 
 
