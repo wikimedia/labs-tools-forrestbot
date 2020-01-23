@@ -108,7 +108,7 @@ def get_slug(branch):
     >>> get_slug("REL1_23")
     'mw1.23'
     >>> get_slug("wmf/1.27.0-wmf.1")
-    'mw1.27.0-wmf.1'
+    '1.27.0-wmf.1'
 
     # deprecated branches, no longer supported
     >>> get_slug("1.23wmf6")
@@ -131,7 +131,7 @@ def get_slug(branch):
             version, minor = branch[4:].split("-wmf.")
             if int(minor) > 900:
                 return None  # test branches
-            return "mw{}-wmf.{}".format(version, minor)
+            return "{}-wmf.{}".format(version, minor)
 
     logging.debug('Unknown branch type %s, returning None' % branch)
     return None
