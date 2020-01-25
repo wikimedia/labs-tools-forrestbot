@@ -24,8 +24,6 @@ def wmf_number(branchname):
     False
     >>> wmf_number('1.32.0-wmf.999')
     False
-    >>> wmf_number('wmf-deploy')
-    False
     """
     try:
         major, minor = branchname.split('wmf', 1)
@@ -107,23 +105,21 @@ def get_slug(branch):
 
     >>> get_slug("REL1_23")
     'mw1.23'
+    >>> get_slug("1.23wmf6")
+    'mw1.23wmf6'
+    >>> get_slug("wmf/1.26wmf9")
+    'mw1.26wmf9'
     >>> get_slug("wmf/1.27.0-wmf.1")
     'mw1.27.0-wmf.1'
-
-    # deprecated branches, no longer supported
-    >>> get_slug("1.23wmf6")
-    >>> get_slug("wmf/1.26wmf9")
-
-    # unsupported branches
     >>> get_slug("randombranch")
     >>> get_slug("wmf/1.32.0-wmf.901")
     >>> get_slug("wmf/1.32.0-wmf.999")
-    >>> get_slug("wmf_deploy")
+    >>>
 
     :param branch: Branch name
     :return: Slugified branch name
     """
-    if branch.startswith('REL'):
+    if branch[:3] == "REL":
         major, minor = branch.split("REL")[1].split("_")
         return "mw%s.%s" % (major, minor)
     elif branch.startswith('wmf/'):
@@ -132,9 +128,13 @@ def get_slug(branch):
             if int(minor) > 900:
                 return None  # test branches
             return "mw{}-wmf.{}".format(version, minor)
-
-    logging.debug('Unknown branch type %s, returning None' % branch)
-    return None
+        else:
+            return 'mw' + branch[4:]
+    elif "wmf" in branch:
+        return 'mw'+branch
+    else:
+        logging.debug('Unknown branch type %s, returning None' % branch)
+        return None
 
 
 def slugify(taskbranches):
