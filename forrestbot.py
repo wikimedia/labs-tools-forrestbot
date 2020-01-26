@@ -15,10 +15,12 @@ import wikimediaci_utils
 import config
 from utils import wmf_number, parse_task_number, slugify
 
-parser = LoggingSetupParser(
-    description="Process changesets and add release tags as required",
-)
-args = parser.parse_args()
+if __name__ == "__main__":
+    parser = LoggingSetupParser(
+        description="Process changesets and add release tags as required",
+    )
+    parser.parse_args()
+
 
 logging.getLogger('requests').setLevel(logging.INFO)
 logger = logging.getLogger('forrestbot')

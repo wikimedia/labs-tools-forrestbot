@@ -1,0 +1,99 @@
+Return-Path: <gerrit@wikimedia.org>
+Received-SPF: pass (google.com: domain of gerrit@wikimedia.org designates 208.80.154.76 as permitted sender) client-ip=208.80.154.76;
+Authentication-Results: mx.google.com;
+       spf=pass (google.com: domain of gerrit@wikimedia.org designates 208.80.154.76 as permitted sender) smtp.mailfrom=gerrit@wikimedia.org;
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=wikimedia.org
+Received: from gerrit1001.wikimedia.org ([2620:0:861:2:208:80:154:136]:49182) by mx1001.wikimedia.org with esmtp (Exim 4.89) (envelope-from <gerrit@wikimedia.org>) id 1irSSa-0003LP-7a; Tue, 14 Jan 2020 20:06:44 +0000
+Received: from [127.0.0.1] (port=49784 helo=localhost) by gerrit1001.wikimedia.org with esmtp (Exim 4.92) (envelope-from <gerrit@wikimedia.org>) id 1irSSa-0007zY-5Q; Tue, 14 Jan 2020 20:06:44 +0000
+X-Gerrit-PatchSet: 1
+Date: Tue, 14 Jan 2020 20:06:44 +0000
+From: "jenkins-bot (Code Review)" <gerrit@wikimedia.org>
+X-Gerrit-MessageType: merged
+List-Id: <gerrit-mediawiki-extensions-LabeledSectionTransclusion.gerrit.wikimedia.org>
+List-Unsubscribe: <https://gerrit.wikimedia.org/r/settings>
+Subject: [Gerrit] mediawiki...LabeledSectionTransclusion[master]: build: Updating mediawiki/mediawiki-codesniffer to 29.0.0
+X-Gerrit-Change-Id: Iac8530a5bc96a08674b443f9a003c3e732c7499a
+X-Gerrit-Change-Number: 564456
+X-Gerrit-ChangeURL: <https://gerrit.wikimedia.org/r/564456>
+X-Gerrit-Commit: 68e6535e7a3a1ba396bd9f344edcd81b04f7a281
+In-Reply-To: <gerrit.1578985388000.Iac8530a5bc96a08674b443f9a003c3e732c7499a@gerrit.wikimedia.org>
+References: <gerrit.1578985388000.Iac8530a5bc96a08674b443f9a003c3e732c7499a@gerrit.wikimedia.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Disposition: inline
+User-Agent: Gerrit/2.15.14-16-g855b179b5f
+Message-Id: <E1irSSa-0003LP-7a@mx1001.wikimedia.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+jenkins-bot has submitted this change and it was merged. ( https://gerrit.w=
+ikimedia.org/r/564456 )
+
+Change subject: build: Updating mediawiki/mediawiki-codesniffer to 29.0.0
+......................................................................
+
+build: Updating mediawiki/mediawiki-codesniffer to 29.0.0
+
+Additional changes:
+* Also sorted "composer fix" command to run phpcbf last.
+
+Change-Id: Iac8530a5bc96a08674b443f9a003c3e732c7499a
+---
+M LabeledSectionTransclusion.php
+M composer.json
+2 files changed, 4 insertions(+), 4 deletions(-)
+
+Approvals:
+  Umherirrender: Looks good to me, approved
+  jenkins-bot: Verified
+
+
+
+diff --git a/LabeledSectionTransclusion.php b/LabeledSectionTransclusion.ph=
+p
+index 4899bbf..06edbdf 100644
+--- a/LabeledSectionTransclusion.php
++++ b/LabeledSectionTransclusion.php
+@@ -1,6 +1,6 @@
+ <?php
+=20
+-/**#@+
++/** #@+
+  * A parser extension that adds two functions, #lst and #lstx, and the
+  * <section> tag, for transcluding marked sections of text.
+  *
+diff --git a/composer.json b/composer.json
+index 4050ea9..3b2599c 100644
+--- a/composer.json
++++ b/composer.json
+@@ -2,14 +2,14 @@
+ =09"require-dev": {
+ =09=09"jakub-onderka/php-parallel-lint": "1.0.0",
+ =09=09"jakub-onderka/php-console-highlighter": "0.3.2",
+-=09=09"mediawiki/mediawiki-codesniffer": "28.0.0",
++=09=09"mediawiki/mediawiki-codesniffer": "29.0.0",
+ =09=09"mediawiki/minus-x": "0.3.2",
+ =09=09"mediawiki/mediawiki-phan-config": "0.9.0"
+ =09},
+ =09"scripts": {
+ =09=09"fix": [
+-=09=09=09"phpcbf",
+-=09=09=09"minus-x fix ."
++=09=09=09"minus-x fix .",
++=09=09=09"phpcbf"
+ =09=09],
+ =09=09"test": [
+ =09=09=09"parallel-lint . --exclude vendor --exclude node_modules",
+
+--=20
+To view, visit https://gerrit.wikimedia.org/r/564456
+To unsubscribe, or for help writing mail filters, visit https://gerrit.wiki=
+media.org/r/settings
+
+Gerrit-Project: mediawiki/extensions/LabeledSectionTransclusion
+Gerrit-Branch: master
+Gerrit-MessageType: merged
+Gerrit-Change-Id: Iac8530a5bc96a08674b443f9a003c3e732c7499a
+Gerrit-Change-Number: 564456
+Gerrit-PatchSet: 1
+Gerrit-Owner: Libraryupgrader <tools.libraryupgrader@tools.wmflabs.org>

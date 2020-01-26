@@ -1,0 +1,6 @@
+username = 'gmail username'
+password = 'gmail password'
+
+PHAB_HOST = 'https://phabricator.wikimedia.org'
+PHAB_USER = 'phabricator user'
+PHAB_CERT = 'phabricator certificate'

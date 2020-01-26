@@ -1,0 +1,92 @@
+Received: by 2002:a25:bf84:0:0:0:0:0 with SMTP id l4csp1030861ybk;
+        Thu, 23 Jan 2020 11:48:26 -0800 (PST)
+X-Google-Smtp-Source: APXvYqzntZgUDqKSwVCcnz6v7Lrc9zZK3IBPYEgUrUm3nvwFNvnXmxc88HRTAg6GqcQksvANzufv
+X-Received: by 2002:a05:6214:1933:: with SMTP id es19mr17650811qvb.14.1579808906775;
+        Thu, 23 Jan 2020 11:48:26 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1579808906; cv=none;
+        d=google.com; s=arc-20160816;
+        b=IZCns6B8ag5oQQiY6c6KwdqdJIKrb6ABTOxsXxryEynm8Wskg5bwra15fMeTriBTfq
+         q5f5Izj7AnukTKnW4yM/XzvTmDmHjO390IcmWKSDI6bvNAhb5x44+qu1sqDgsVzLPiAR
+         RRxE1ew9pO8Oy5QkWZCPnsua/IUrANO38E+/2HSUk4ODmprw6GeIWbGylqgNk7EMcM0h
+         A80NLobMB0FEc7p6oJw1Ip7ghczBISS3vxnqqlKbVxRScIquvqsfGRiT5Tv55agnb7oE
+         50MEV/jx0K+CEwzq4vNoqFMJcE7GqjZClk8YA+KuugP5dxV1z/dOO51QADUFuhUtOIMt
+         Vbkw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=sender:errors-to:content-transfer-encoding:reply-to:list-subscribe
+         :list-help:list-post:list-archive:list-unsubscribe:list-id
+         :precedence:subject:to:message-id:date:from:mime-version
+         :dkim-signature:dkim-signature;
+        bh=IoQFdlpZpJ+zruAo0vDX4sTS5gwLFRLjHtOxs0at+iA=;
+        b=rK/dqODMFLwXW58XkLQ0625rdrsZHpo90hdVF0Gk0SH54+ajFDsAUondb6M7g9lL8D
+         FXcPBSvI5GuCm0Hh1T613by6h7wKrcTOI4dxp7U/cWZE8EAEYDDV0G6dMotybNlHuLM9
+         sWzpjjULxGwAQEwwQwEhlwzjKd0YFv7eZe2n+99vAmbz4WcW/sV454oSTmO0l0Nf9Plt
+         R5zfjeCeDEXaiV/edF8Tke6k+BycM26hCVEbFmLn9zQrwsQYLpWbe5pRoa2wpmS2uTra
+         YDjD3Nin4xwyyeVmv4vJbgHha8I4GQbZ4dRTO9FSG6nEUnQEA+8B1H4x78f/jumOb+9W
+         Wejw==
+ARC-Authentication-Results: i=1; mx.google.com;
+       dkim=pass header.i=@lists.wikimedia.org header.s=wikimedia header.b=jMAgMuXh;
+       dkim=neutral (body hash did not verify) header.i=@wikimedia.org header.s=google header.b=VRlLHxdN;
+       spf=pass (google.com: domain of wikitech-l-bounces@lists.wikimedia.org designates 208.80.154.21 as permitted sender) smtp.mailfrom=wikitech-l-bounces@lists.wikimedia.org;
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=wikimedia.org
+Return-Path: <wikitech-l-bounces@lists.wikimedia.org>
+Received: from lists.wikimedia.org (lists.wikimedia.org. [208.80.154.21])
+        by mx.google.com with ESMTPS id y3si691633qtb.234.2020.01.23.11.48.26
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 23 Jan 2020 11:48:26 -0800 (PST)
+Received-SPF: pass (google.com: domain of wikitech-l-bounces@lists.wikimedia.org designates 208.80.154.21 as permitted sender) client-ip=208.80.154.21;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@lists.wikimedia.org header.s=wikimedia header.b=jMAgMuXh;
+       dkim=neutral (body hash did not verify) header.i=@wikimedia.org header.s=google header.b=VRlLHxdN;
+       spf=pass (google.com: domain of wikitech-l-bounces@lists.wikimedia.org designates 208.80.154.21 as permitted sender) smtp.mailfrom=wikitech-l-bounces@lists.wikimedia.org;
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=wikimedia.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lists.wikimedia.org; s=wikimedia; h=Sender:Content-Transfer-Encoding:Content-Type:Reply-To:List-Subscribe:List-Help:List-Post:List-Archive:List-Unsubscribe:List-Id:Subject:To:Message-ID:Date:From:MIME-Version; bh=IoQFdlpZpJ+zruAo0vDX4sTS5gwLFRLjHtOxs0at+iA=; b=jMAgMuXhUMlG1fkyzbkAyXiG6hcpq/kElfPHElQLp3olOHnfEodxEGbro4IDLfGIESBJCc01moRfEGJTKjvKsg5iSx5WP28mVf0gr/SSzr9RLNDJn4RHL6JgiMM+RTTXT6hHBU3GX9bNK6+CtpF7qNMLBiZbkkJXfgae6tHUMfA=;
+Received: from localhost ([::1]:58238 helo=fermium.wikimedia.org) by fermium.wikimedia.org with esmtp (Exim 4.84_2) (envelope-from <wikitech-l-bounces@lists.wikimedia.org>) id 1iuiS6-0004yk-Fe; Thu, 23 Jan 2020 19:47:42 +0000
+Received: from mail-oi1-x22f.google.com ([2607:f8b0:4864:20::22f]:40992) by fermium.wikimedia.org with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128) (Exim 4.84_2) (envelope-from <sreed@wikimedia.org>) id 1iuiRo-0004xm-T8 for wikitech-l@lists.wikimedia.org; Thu, 23 Jan 2020 19:47:28 +0000
+Received: by mail-oi1-x22f.google.com with SMTP id i1so4075710oie.8 for <wikitech-l@lists.wikimedia.org>; Thu, 23 Jan 2020 11:47:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wikimedia.org; s=google; h=mime-version:from:date:message-id:subject:to; bh=bthxxwyWNY9Fss/muOTnoC8/Vb8tq4lVvxX1XORIb4I=; b=VRlLHxdNo0lKaxV4gLjmDdN9B+s2cjyhQijsOa6HBJ6UAOe8q+kuh2+s6deSmP6wYN UPkyx9ebPYDPTJyuOtTl1M7yAVgXjWfSM3XiWJN4jLmdUM1NSeCBW/n/d8uLncZUPLYb QnXTshSAzSeoRq7uFxb2XcV1ZoDQkrTNLgxSg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=1e100.net; s=20161025; h=x-gm-message-state:mime-version:from:date:message-id:subject:to; bh=bthxxwyWNY9Fss/muOTnoC8/Vb8tq4lVvxX1XORIb4I=; b=tV0+y8/uoe55Cxh+FwolbKeKd+/r+F0GAugNlPT3HDjYLwDzQtn4f3Ci75DIAMuypM mrgNbxDzJWX2bvn+56KBmhLejwwrhRs8zRW2uI5AUi1EkkD5vjICRFzeyKOYT2bAyudd UEoA//0t5T5Uz5DIKaZpRzKaLgPwz1rR3/JBEx/gE3xWUi0pcMsJQ0WkVL8OBpg4CLIU GoG0lhN0bxzxXud/MksmAo/aOOqM8SFq0MAJ9mMhiH7eMNPedprCOqubmyW7jdjiYpHo 9TAABTB5wrKaceqUJyfsVZVOlJrLTVh4J2HAc0pGG9iSLl6i7JFpzIeNeFB3PyR7tgDT UiGg==
+X-Gm-Message-State: APjAAAXk3yc7vLuoJUnHKEp/WMWixBNCr7s178aLciZxxnHQT1oYgZpv z3VyhUaRKVsPe6jiWGOz1Uvcl7WN+WsToY579K76+m2I
+X-Received: by 2002:a54:4085:: with SMTP id i5mr11800653oii.17.1579808839219;
+  Thu, 23 Jan 2020 11:47:19 -0800 (PST)
+MIME-Version: 1.0
+From: A B <ab@c.org>
+Date: Thu, 23 Jan 2020 20:47:08 +0100
+Message-ID: <CAOCnLWZYcr+Pzm+iMOkCNpT8y61_hJ=eA82aSs49m6VcspuoRg@mail.gmail.com>
+To: mediawiki-announce@lists.wikimedia.org, mediawiki-l@lists.wikimedia.org, wikitech-l@lists.wikimedia.org
+X-Content-Filtered-By: Mailman/MimeDel 2.1.18
+Subject: [Wikitech-l] MediaWiki 1.32 is End of Life
+X-BeenThere: wikitech-l@lists.wikimedia.org
+X-Mailman-Version: 2.1.18
+Precedence: list
+List-Id: Wikimedia developers <wikitech-l.lists.wikimedia.org>
+List-Unsubscribe: <https://lists.wikimedia.org/mailman/options/wikitech-l>, <mailto:wikitech-l-request@lists.wikimedia.org?subject=unsubscribe>
+List-Archive: <https://lists.wikimedia.org/pipermail/wikitech-l/>
+List-Post: <mailto:wikitech-l@lists.wikimedia.org>
+List-Help: <mailto:wikitech-l-request@lists.wikimedia.org?subject=help>
+List-Subscribe: <https://lists.wikimedia.org/mailman/listinfo/wikitech-l>, <mailto:wikitech-l-request@lists.wikimedia.org?subject=subscribe>
+Reply-To: Wikimedia developers <wikitech-l@lists.wikimedia.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+Errors-To: wikitech-l-bounces@lists.wikimedia.org
+Sender: Wikitech-l <wikitech-l-bounces@lists.wikimedia.org>
+
+QXMgcGVyIHRoZSBNZWRpYVdpa2kgdmVyc2lvbiBsaWZlIGN5Y2xlIFsxXSwgSSB3b3VsZCBsaWtl
+IHRvIGFubm91bmNlIHRoZQpmb3JtYWwgZW5kIG9mIGxpZmUgKEVPTCkgb2YgTWVkaWFXaWtpIDEu
+MzIgYXMgb2YgdG9tb3Jyb3csIEZyaWRheSBKYW51YXJ5CjI0LCAyMDE5LgoKVGhpcyBtZWFucyB0
+aGF0IE1lZGlhV2lraSAxLjMyIHdpbGwgbm8gbG9uZ2VyIHJlY2VpdmUgbWFpbnRlbmFuY2Ugb3IK
+c2VjdXJpdHkgYmFja3BvcnRzLiBJdCBpcyB0aGVyZWZvcmUgc3Ryb25nbHkgZGlzY291cmFnZWQg
+dGhhdCB5b3UgY29udGludWUKdG8gdXNlIGl0LgoKSXQgaXMgcmVjb21tZW5kZWQgdG8gdXBncmFk
+ZSB0byBNZWRpYVdpa2kgMS4zNCAoZHVlIHRvIGJlY29tZSBFT0wgaW4KTm92ZW1iZXIgMjAyMCks
+IG9yIGxlc3MgcHJlZmVyYWJseSB0byBNZWRpYVdpa2kgMS4zMyAoZHVlIHRvIGJlY29tZSBFT0wg
+aW4KSnVuZSAyMDIwKS4gVGhlIGN1cnJlbnQgTG9uZyBUZXJtIFN1cHBvcnQgKExUUykgdmVyc2lv
+biBvZiBNZWRpYVdpa2ksCk1lZGlhV2lraSAxLjMxLCBpcyBvbGRlciAoYW5kIGRvd25ncmFkaW5n
+IGlzIG5vdCBzdXBwb3J0ZWQpLCB0aG91Z2ggdGhlCm5leHQgTFRTIChNZWRpYVdpa2kgMS4zNSkg
+aXMgZHVlIHRvIGJlIHJlbGVhc2VkIGluIEp1bmUgMjAyMCwgYW5kIHdpbGwgYmUKc3VwcG9ydGVk
+IHVudGlsIEp1bmUgMjAyMy4KCk1lZGlhV2lraSAxLjMzIGhhcyB0aGUgc2FtZSBzdXBwb3J0ZWQg
+UEhQIHZlcnNpb24gb2YgNy4wICh3aGljaCBpcyBpdHNlbGYKdW5zdXBwb3J0ZWQgdXBzdHJlYW0p
+LCBpbiBjYXNlIHlvdSBuZWVkIGxvbmdlciB0byB1cGdyYWRlIHlvdXIgc3lzdGVtcy4KTWVkaWFX
+aWtpIDEuMzQgcmVxdWlyZXMgUEhQIDcuMi45IG9yIGxhdGVyLgoKVGhhbmtzIQoKClNhbSBSZWVk
+CgpbMV0gaHR0cHM6Ly93d3cubWVkaWF3aWtpLm9yZy93aWtpL1ZlcnNpb25fbGlmZWN5Y2xlCl9f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCldpa2l0ZWNoLWwg
+bWFpbGluZyBsaXN0Cldpa2l0ZWNoLWxAbGlzdHMud2lraW1lZGlhLm9yZwpodHRwczovL2xpc3Rz
+Lndpa2ltZWRpYS5vcmcvbWFpbG1hbi9saXN0aW5mby93aWtpdGVjaC1s

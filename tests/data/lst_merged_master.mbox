@@ -1,0 +1,91 @@
+Received: by 2002:ab0:4dcf:0:0:0:0:0 with SMTP id b15csp6663071uah;
+        Wed, 14 Nov 2018 21:53:48 -0800 (PST)
+Return-Path: <gerrit@wikimedia.org>
+Received-SPF: pass (google.com: domain of gerrit@wikimedia.org designates 208.80.154.76 as permitted sender) client-ip=208.80.154.76;
+Authentication-Results: mx.google.com;
+       spf=pass (google.com: domain of gerrit@wikimedia.org designates 208.80.154.76 as permitted sender) smtp.mailfrom=gerrit@wikimedia.org;
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=wikimedia.org
+Received: from cobalt.wikimedia.org ([2620:0:861:3:208:80:154:81]:43204) by mx1001.wikimedia.org with esmtp (Exim 4.89) (envelope-from <gerrit@wikimedia.org>) id 1gNAb5-0001pk-38; Thu, 15 Nov 2018 05:53:47 +0000
+Received: from [127.0.0.1] (port=50974 helo=localhost) by cobalt.wikimedia.org with esmtp (Exim 4.84_2) (envelope-from <gerrit@wikimedia.org>) id 1gNAb4-0005M1-Up; Thu, 15 Nov 2018 05:53:46 +0000
+X-Gerrit-PatchSet: 1
+Date: Thu, 15 Nov 2018 05:53:46 +0000
+From: "jenkins-bot (Code Review)" <gerrit@wikimedia.org>
+X-Gerrit-MessageType: merged
+List-Id: <gerrit-mediawiki-extensions-LabeledSectionTransclusion.gerrit.wikimedia.org>
+List-Unsubscribe: <https://gerrit.wikimedia.org/r/settings>
+Subject: [Gerrit] mediawiki...LabeledSectionTransclusion[master]: Avoid the name of undefined variable pass to compact()
+X-Gerrit-Change-Id: I72cf9ae62929d115492edb4deaf4f92ffa742d36
+X-Gerrit-Change-Number: 472763
+X-Gerrit-ChangeURL: <https://gerrit.wikimedia.org/r/472763>
+X-Gerrit-Commit: 6fa7072747d80076ad5f7e5fd256db8792218d2f
+In-Reply-To: <gerrit.1541837194000.I72cf9ae62929d115492edb4deaf4f92ffa742d36@gerrit.wikimedia.org>
+References: <gerrit.1541837194000.I72cf9ae62929d115492edb4deaf4f92ffa742d36@gerrit.wikimedia.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Disposition: inline
+User-Agent: Gerrit/2.15.6-5-g4b9c845200
+Message-Id: <E1gNAb5-0001pk-38@mx1001.wikimedia.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+jenkins-bot has submitted this change and it was merged. ( https://gerrit.w=
+ikimedia.org/r/472763 )
+
+Change subject: Avoid the name of undefined variable pass to compact()
+......................................................................
+
+Avoid the name of undefined variable pass to compact()
+
+1. Remove 'dom', because unused and undefined in the context.
+2. The existence of $repl depends on $func, and 'repl' is only used if $fun=
+c is lstx. Make sure the context always defines $repl.
+
+Bug: T207255
+Change-Id: I72cf9ae62929d115492edb4deaf4f92ffa742d36
+---
+M LabeledSectionTransclusion.class.php
+1 file changed, 2 insertions(+), 1 deletion(-)
+
+Approvals:
+  Legoktm: Looks good to me, approved
+  jenkins-bot: Verified
+
+
+
+diff --git a/LabeledSectionTransclusion.class.php b/LabeledSectionTransclus=
+ion.class.php
+index b248626..0deeee1 100644
+--- a/LabeledSectionTransclusion.class.php
++++ b/LabeledSectionTransclusion.class.php
+@@ -281,6 +281,7 @@
+=20
+ =09=09$begin =3D trim( $frame->expand( array_shift( $args ) ) );
+=20
++=09=09$repl =3D null;
+ =09=09if ( $func =3D=3D 'lstx' ) {
+ =09=09=09if ( !count( $args ) ) {
+ =09=09=09=09$repl =3D '';
+@@ -300,7 +301,7 @@
+ =09=09$endAttr =3D self::getAttrPattern_( $end, 'end' );
+ =09=09$endRegex =3D "/^$endAttr$/s";
+=20
+-=09=09return compact( 'dom', 'root', 'newFrame', 'repl', 'beginRegex', 'be=
+gin', 'endRegex' );
++=09=09return compact( 'root', 'newFrame', 'repl', 'beginRegex', 'begin', '=
+endRegex' );
+ =09}
+=20
+ =09/**
+
+--=20
+To view, visit https://gerrit.wikimedia.org/r/472763
+To unsubscribe, or for help writing mail filters, visit https://gerrit.wiki=
+media.org/r/settings
+
+Gerrit-Project: mediawiki/extensions/LabeledSectionTransclusion
+Gerrit-Branch: master
+Gerrit-MessageType: merged
+Gerrit-Change-Id: I72cf9ae62929d115492edb4deaf4f92ffa742d36
+Gerrit-Change-Number: 472763
+Gerrit-PatchSet: 1
+Gerrit-Owner: A <b@c.com>

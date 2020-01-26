@@ -1,0 +1,132 @@
+Delivered-To: forrestbot@gmail.com
+Received: by 2002:a17:90a:2263:0:0:0:0 with SMTP id c90csp7282178pje;
+        Wed, 15 Jan 2020 09:50:16 -0800 (PST)
+X-Google-Smtp-Source: APXvYqxUbJ0uQGH/VptPTODeIsLYYVlappwZF9UUGpd5ishMfbyX3+6VMpnWoX9XsLj3nS+WCVB5
+X-Received: by 2002:a05:620a:7d0:: with SMTP id 16mr29196216qkb.438.1579110615876;
+        Wed, 15 Jan 2020 09:50:15 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1579110615; cv=none;
+        d=google.com; s=arc-20160816;
+        b=L0bA3mCOBVtJ279YsyvLbyv9hI6PLqb8DTAmrprqd6vezPT1UNdNpls+LVVryNzN82
+         PlgGw6pZ+1jBMVaXU3u1hb0JS73Q0pG64FRybmCT2qu9egtAoZRkg16RwGFQAPnXUpxq
+         lhdgo58cgMlzkWRqtbp4deUAk9x3TZYWBd2x1yNuVMcLjuiEwsyFWCRiVNZpelzL9LfE
+         84GcesQkRRAxY4B4kp2XYP3O8fi8WNJmEP/N040NtdgTYA+2sBAmHVbthLsqq4zE4abX
+         PjjEnuRlWlLr7Rvb9w0tfzPCDYQjBLOu/CwqzSqB8nGmICzm6/RSPpqX+JYqJNbDO0UK
+         wvQg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=sender:errors-to:content-transfer-encoding:reply-to:list-subscribe
+         :list-help:list-post:list-unsubscribe:list-id:precedence:subject:cc
+         :user-agent:mime-version:references:message-id:from:date
+         :dkim-signature:dkim-signature;
+        bh=tON2JZzPneLIsTjg0woNHV8VY6PAU6OzvQ19DKYM/UE=;
+        b=GJxy6RWXewmMShESnuriTiPZkmY79VqtgdXF4FvKEB8xHv0yFzdo3mjWxalithSN9o
+         +td7H4Ez6JrZwYkWztTlC53P47Wuc4SBN45Mm+8UfyX7YkCiBCz9PPC5uj34DB6nz00s
+         NK7l2jyr2QkPxBrCuKci24zqd4P3UdF5XZ5jhSDgQRW4bp7PTO1wERmkvY6rvaWulHae
+         N7qU5hIbDkTj1gWM2XXb0mjjOoeA+eRA+sx1k04ayaYcy3zPElHMLAa9WA114N9MSjnr
+         0BTgkWRWDBX7WeYZdA9Bo3Bb2Co0SxwDdPYuF60TDC3vwhqFu1vR+atQQjYRTVxW0xT6
+         F0Hw==
+ARC-Authentication-Results: i=1; mx.google.com;
+       dkim=pass header.i=@lists.wikimedia.org header.s=wikimedia header.b=GtvXtaQ5;
+       dkim=neutral (body hash did not verify) header.i=@wikimedia.org header.s=wikimedia header.b=qMq3yi8J;
+       spf=pass (google.com: domain of mediawiki-commits-bounces@lists.wikimedia.org designates 208.80.154.21 as permitted sender) smtp.mailfrom=mediawiki-commits-bounces@lists.wikimedia.org;
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=wikimedia.org
+Return-Path: <mediawiki-commits-bounces@lists.wikimedia.org>
+Received: from lists.wikimedia.org (lists.wikimedia.org. [208.80.154.21])
+        by mx.google.com with ESMTPS id q5si11593882qkq.111.2020.01.15.09.50.15
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 15 Jan 2020 09:50:15 -0800 (PST)
+Received-SPF: pass (google.com: domain of mediawiki-commits-bounces@lists.wikimedia.org designates 208.80.154.21 as permitted sender) client-ip=208.80.154.21;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@lists.wikimedia.org header.s=wikimedia header.b=GtvXtaQ5;
+       dkim=neutral (body hash did not verify) header.i=@wikimedia.org header.s=wikimedia header.b=qMq3yi8J;
+       spf=pass (google.com: domain of mediawiki-commits-bounces@lists.wikimedia.org designates 208.80.154.21 as permitted sender) smtp.mailfrom=mediawiki-commits-bounces@lists.wikimedia.org;
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=wikimedia.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lists.wikimedia.org; s=wikimedia;
+	h=Sender:Content-Transfer-Encoding:Content-Type:Reply-To:List-Subscribe:List-Help:List-Post:List-Unsubscribe:List-Id:Subject:Cc:MIME-Version:References:Message-ID:From:Date; bh=tON2JZzPneLIsTjg0woNHV8VY6PAU6OzvQ19DKYM/UE=;
+	b=GtvXtaQ52SEV12LmjeZ2eWBdd9bkOaKM1KpF6aUW6aqy1EdbYHzgTr9tcBJX4FUeqfLaqg9Ja6zKzvXwma8OSEOfFWrBsxLmz8nKFoWNMBsb1//vb8qTvyHjAUY795210Z/fBLk8+lh/iazqY0lR4tMU0uGfyGoC1e364GfaP2Y=;
+Received: from localhost ([::1]:38588 helo=fermium.wikimedia.org)
+	by fermium.wikimedia.org with esmtp (Exim 4.84_2)
+	(envelope-from <mediawiki-commits-bounces@lists.wikimedia.org>)
+	id 1irmo3-0002gk-8c; Wed, 15 Jan 2020 17:50:15 +0000
+Received: from mx1001.wikimedia.org ([2620:0:861:3:208:80:154:76]:45476)
+ by fermium.wikimedia.org with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+ (Exim 4.84_2) (envelope-from <gerrit@wikimedia.org>)
+ id 1irmnt-0002g9-JD
+ for mediawiki-commits@lists.wikimedia.org; Wed, 15 Jan 2020 17:50:05 +0000
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+ d=wikimedia.org; s=wikimedia; h=Content-Type:Content-Transfer-Encoding:
+ MIME-Version:Reply-To:References:Subject:List-Unsubscribe:List-Id:Message-ID:
+ CC:From:Date:Sender:To:Content-ID:Content-Description:Resent-Date:Resent-From
+ :Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:List-Help:
+ List-Subscribe:List-Post:List-Owner:List-Archive;
+ bh=W4ipDsbqJaI6WIP1CDXlazNNLuaZNFwS2vVONmzrGtc=; b=qMq3yi8JVQBkespiYMZy1qRWxG
+ qNJ9zQ/PEVu9xxikAT1PqNBrH15NkenqmS2LqhHg0XDNrSEmGh3nZaZCyVKbMJbYtna53ogr466IG
+ A9RxKDkwWCvGBz3XL5smEMC0pwbMIxX78spBkvIYMHD+O04gWnq7VZ4E7bp0xHbV1/zg=;
+Received: from gerrit1001.wikimedia.org ([2620:0:861:2:208:80:154:136]:58460)
+ by mx1001.wikimedia.org with esmtp (Exim 4.89)
+ (envelope-from <gerrit@wikimedia.org>)
+ id 1irmno-0004Qy-Ed; Wed, 15 Jan 2020 17:50:00 +0000
+Received: from [127.0.0.1] (port=59060 helo=localhost)
+ by gerrit1001.wikimedia.org with esmtp (Exim 4.92)
+ (envelope-from <gerrit@wikimedia.org>)
+ id 1irmno-0001j9-D1; Wed, 15 Jan 2020 17:50:00 +0000
+X-Gerrit-PatchSet: 1
+Date: Wed, 15 Jan 2020 17:49:58 +0000
+From: "gerrt (Code Review)" <gerrit@wikimedia.org>
+Message-ID: <gerrit.1579110594000.I44b598e885947cadaa3bae2b7446f150395f1cea@gerrit.wikimedia.org>
+X-Gerrit-MessageType: newchange
+X-Gerrit-Change-Id: I44b598e885947cadaa3bae2b7446f150395f1cea
+X-Gerrit-Change-Number: 565076
+X-Gerrit-ChangeURL: <https://gerrit.wikimedia.org/r/565076>
+X-Gerrit-Commit: 11ca56324d372212d01394ed7471e5643f5a6d33
+References: <gerrit.1579110594000.I44b598e885947cadaa3bae2b7446f150395f1cea@gerrit.wikimedia.org>
+MIME-Version: 1.0
+User-Agent: Gerrit/2.15.14-16-g855b179b5f
+X-Content-Filtered-By: Mailman/MimeDel 2.1.18
+Subject: [MediaWiki-commits] [Gerrit] mediawiki/core[master]:
+	IndexPager::$offset can be int|string
+X-BeenThere: mediawiki-commits@lists.wikimedia.org
+X-Mailman-Version: 2.1.18
+Precedence: list
+List-Id: MediaWiki gerrit commits <mediawiki-commits.lists.wikimedia.org>
+List-Unsubscribe: <https://lists.wikimedia.org/mailman/options/mediawiki-commits>,
+ <mailto:mediawiki-commits-request@lists.wikimedia.org?subject=unsubscribe>
+List-Post: <mailto:mediawiki-commits@lists.wikimedia.org>
+List-Help: <mailto:mediawiki-commits-request@lists.wikimedia.org?subject=help>
+List-Subscribe: <https://lists.wikimedia.org/mailman/listinfo/mediawiki-commits>,
+ <mailto:mediawiki-commits-request@lists.wikimedia.org?subject=subscribe>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+Errors-To: mediawiki-commits-bounces@lists.wikimedia.org
+Sender: "MediaWiki-commits" <mediawiki-commits-bounces@lists.wikimedia.org>
+
+MDF0b255dGhvbWFzIGhhcyB1cGxvYWRlZCB0aGlzIGNoYW5nZSBmb3IgcmV2aWV3LiAoIGh0dHBz
+Oi8vZ2Vycml0Lndpa2ltZWRpYS5vcmcvci81NjUwNzYKCgpDaGFuZ2Ugc3ViamVjdDogSW5kZXhQ
+YWdlcjo6JG9mZnNldCBjYW4gYmUgaW50fHN0cmluZwouLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
+Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uCgpJbmRleFBhZ2Vy
+Ojokb2Zmc2V0IGNhbiBiZSBpbnR8c3RyaW5nCgpCcmVha3M6IEk4MTA2NDBhMDcyNjhkOTNiNGY4
+MDc0NTUyODI4MTc3NmI0YTU0NjgyCkFwcGFyZW50bHksIGl0IGlzIGRlZmluZWQgb24gdGhlIGNs
+YXNzIHByb3AgY29ycmVjdGx5IGFzIGFuIGludHxzdHJpbmcKCkJ1ZzogVDI0Mjc4MwpDaGFuZ2Ut
+SWQ6IEk0NGI1OThlODg1OTQ3Y2FkYWEzYmFlMmI3NDQ2ZjE1MDM5NWYxY2VhCi0tLQpNIGluY2x1
+ZGVzL3BhZ2VyL0luZGV4UGFnZXIucGhwCjEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwg
+MSBkZWxldGlvbigtKQoKCgogIGdpdCBwdWxsIHNzaDovL2dlcnJpdC53aWtpbWVkaWEub3JnOjI5
+NDE4L21lZGlhd2lraS9jb3JlIHJlZnMvY2hhbmdlcy83Ni81NjUwNzYvMQoKZGlmZiAtLWdpdCBh
+L2luY2x1ZGVzL3BhZ2VyL0luZGV4UGFnZXIucGhwIGIvaW5jbHVkZXMvcGFnZXIvSW5kZXhQYWdl
+ci5waHAKaW5kZXggNzI5ZWY0Ny4uZmFkYzc0ZCAxMDA2NDQKLS0tIGEvaW5jbHVkZXMvcGFnZXIv
+SW5kZXhQYWdlci5waHAKKysrIGIvaW5jbHVkZXMvcGFnZXIvSW5kZXhQYWdlci5waHAKQEAgLTQy
+NSw3ICs0MjUsNyBAQAogCSAqCiAJICogQG5vdGUgRm9yIGIvYywgcXVlcnkgZGlyZWN0aW9uIGlz
+IHRydWUgZm9yIGFzY2VuZGluZyBhbmQgZmFsc2UgZm9yIGRlc2NlbmRpbmcKIAkgKgotCSAqIEBw
+YXJhbSBzdHJpbmcgJG9mZnNldCBJbmRleCBvZmZzZXQsIGluY2x1c2l2ZQorCSAqIEBwYXJhbSBp
+bnR8c3RyaW5nICRvZmZzZXQgSW5kZXggb2Zmc2V0LCBpbmNsdXNpdmUKIAkgKiBAcGFyYW0gaW50
+ICRsaW1pdCBFeGFjdCBxdWVyeSBsaW1pdAogCSAqIEBwYXJhbSBib29sICRvcmRlciBJbmRleFBh
+Z2VyOjpRVUVSWV9BU0NFTkRJTkcgb3IgSW5kZXhQYWdlcjo6UVVFUllfREVTQ0VORElORwogCSAq
+IEByZXR1cm4gYXJyYXkKCi0tIApUbyB2aWV3LCB2aXNpdCBodHRwczovL2dlcnJpdC53aWtpbWVk
+aWEub3JnL3IvNTY1MDc2ClRvIHVuc3Vic2NyaWJlLCBvciBmb3IgaGVscCB3cml0aW5nIG1haWwg
+ZmlsdGVycywgdmlzaXQgaHR0cHM6Ly9nZXJyaXQud2lraW1lZGlhLm9yZy9yL3NldHRpbmdzCgpH
+ZXJyaXQtUHJvamVjdDogbWVkaWF3aWtpL2NvcmUKR2Vycml0LUJyYW5jaDogbWFzdGVyCkdlcnJp
+dC1NZXNzYWdlVHlwZTogbmV3Y2hhbmdlCkdlcnJpdC1DaGFuZ2UtSWQ6IEk0NGI1OThlODg1OTQ3
+Y2FkYWEzYmFlMmI3NDQ2ZjE1MDM5NWYxY2VhCkdlcnJpdC1DaGFuZ2UtTnVtYmVyOiA1NjUwNzYK
+R2Vycml0LVBhdGNoU2V0OiAxCkdlcnJpdC1Pd25lcjogMDF0b255dGhvbWFzIDwwMXRvbnl0aG9t
+YXNAZ21haWwuY29tPgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fXwpNZWRpYVdpa2ktY29tbWl0cyBtYWlsaW5nIGxpc3QKTWVkaWFXaWtpLWNvbW1pdHNAbGlz
+dHMud2lraW1lZGlhLm9yZwpodHRwczovL2xpc3RzLndpa2ltZWRpYS5vcmcvbWFpbG1hbi9saXN0
+aW5mby9tZWRpYXdpa2ktY29tbWl0cwo=
