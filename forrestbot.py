@@ -29,7 +29,7 @@ logger = logging.getLogger('forrestbot')
 phab = legophab.Phabricator(
     config.PHAB_HOST,
     config.PHAB_USER,
-    config.PHAB_CERT
+    token=config.PHAB_TOKEN
 )
 gerrit = gerrit_rest.GerritREST("https://gerrit.wikimedia.org/r")
 

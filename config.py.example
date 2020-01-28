@@ -3,4 +3,4 @@ password = 'gmail password'
 
 PHAB_HOST = 'https://phabricator.wikimedia.org'
 PHAB_USER = 'phabricator user'
-PHAB_CERT = 'phabricator certificate'
+PHAB_TOKEN = 'phabricator token'
