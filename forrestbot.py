@@ -47,9 +47,9 @@ def get_master_branches(repository):
                          if (marker in b and wmf_number(b.split(marker)[1]))],
                         key=wmf_number)[-1]
 
-    wmf_parts = newest_wmf.split("wmf")
+    wmf_parts = newest_wmf.split("-wmf.")
     wmf_parts[1] = wmf_parts[1].replace('.', '')
-    next_wmf = wmf_parts[0] + "wmf" + str(int(wmf_parts[1]) + 1)
+    next_wmf = "wmf/" + wmf_parts[0] + "-wmf." + str(int(wmf_parts[1]) + 1)
 
     return [next_wmf]
 

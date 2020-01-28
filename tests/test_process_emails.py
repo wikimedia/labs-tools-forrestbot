@@ -59,16 +59,20 @@ def test_lst_merged_master():
     assert result['url'] == 'https://gerrit.wikimedia.org/r/472763'
 
     assert len(result['slugs']) == 1
-    assert re.match(r"mw\d+\.\d+\.\d+-wmf\d+", result['slugs'][0])
+    assert re.match(r"mw\d+\.\d+\.\d+-wmf\.\d+", result['slugs'][0])
 
 
-@pytest.mark.xfail
 def test_wmf_deploy():
     """wmf_deploy branch should be skipped and should not crash"""
     mail = list(pop3bot.gerritmail_generator(FakeMailbox('wmf_deploy.mbox')))[0]
     result = forrestbot.process_mail(mail)
 
-    assert result is None
+    assert result == {
+        'branch': 'wmf_deploy',
+        'slugs': [],
+        'task': 196090,
+        'url': 'https://gerrit.wikimedia.org/r/566748'
+    }
 
 
 def test_extension_wmf_branch():
@@ -92,7 +96,7 @@ def test_mw_core_master():
     assert result['url'] == 'https://gerrit.wikimedia.org/r/562917'
 
     assert len(result['slugs']) == 1
-    assert re.match(r"mw\d+\.\d+\.\d+-wmf\d+", result['slugs'][0])
+    assert re.match(r"mw\d+\.\d+\.\d+-wmf\.\d+", result['slugs'][0])
 
 
 @pytest.mark.xfail
