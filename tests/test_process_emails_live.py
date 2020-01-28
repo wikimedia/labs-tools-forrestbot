@@ -3,10 +3,13 @@ from pathlib import Path
 
 import pytest
 
-import forrestbot
-import pop3bot
+root = Path(__file__).parent.parent  # type: Path
 
-root = Path(__file__).parent.parent
+if not (root / "config.py").exists():
+    pytest.skip("No config.py present; skipping live tests", allow_module_level=True)
+
+import forrestbot  # noqa -- import after verifying import can succeed
+import pop3bot     # noqa -- import after verifying import can succeed
 
 
 class FakeMailbox:
