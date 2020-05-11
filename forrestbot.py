@@ -162,33 +162,41 @@ def main():
         acts = sorted(acts, key=lambda x: x['slugs'])
 
         add_PHIDs = set()
+        add_slugs = set()
 
         # build changes
         for act in acts:
             for slug in act['slugs']:
+                add_slugs.add(slug)
                 add_PHIDs.add(get_slug_PHID(slug))
 
-        logger.info("Adding PHID {PHIDs} to T{task}.".format(
-            PHIDs=add_PHIDs, task=task
-        ))
+        description = "https://phabricator.wikimedia.org/T{task}: adding tags {slugs} -> PHIDs {PHIDs}".format(
+            slugs=add_slugs, PHIDs=add_PHIDs, task=task
+        )
+        logger.info(description)
 
         # now we get the task to know what the existing tags are
-        task_info = phab.request('maniphest.info', {'task_id': str(task)})
-        if not task_info:
+        try:
+            task_info = phab.request('maniphest.info', {'task_id': str(task)})
+        except legophab.PhabricatorException as e:
             # Security bug? T101133
-            logger.warning(
-                ('Unable to get information about T{task}, maybe it is' +
-                 ' private?').format(task=task)
-            )
-            continue
+            logger.error(description)
+            logger.error('Unable to get information about T%i, maybe it is private?', task, e)
+            raise
+
         old_projs = set(task_info['projectPHIDs'])
         logger.debug("Existing PHIDs: {old_projs}".format(old_projs=old_projs))
         new_projs = set(task_info['projectPHIDs']) | add_PHIDs
         if old_projs != new_projs:
-            phab.request('maniphest.update', {'id': str(task),
-                                              'projectPHIDs': list(new_projs),
-                                              }
-                         )
+            try:
+                phab.request('maniphest.update', {
+                    'id': str(task),
+                    'projectPHIDs': list(new_projs),
+                })
+            except legophab.PhabricatorException as e:
+                logger.error(description)
+                logger.error('Unable to update T%i, maybe it is read-only?', task, e)
+                raise
         else:
             logging.info(
                 "Skipping T{task}; no new projects to add".format(task=task)
