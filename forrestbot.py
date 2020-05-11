@@ -4,9 +4,13 @@ https://etherpad.wikimedia.org/p/T280 & https://phabricator.wikimedia.org/T280
 __author__ = 'Merlijn van Deen'  # noqa
 
 import functools
+import sys
+
 import itertools
+import queue
 
 import logging
+import logging.handlers
 from wblogging import LoggingSetupParser
 
 import gerrit_rest
@@ -22,6 +26,11 @@ if __name__ == "__main__":
     parser.parse_args()
 
 
+errorQueue = queue.Queue()
+queueHandler = logging.handlers.QueueHandler(errorQueue)
+queueHandler.setLevel(logging.ERROR)
+queueHandler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+logging.getLogger().addHandler(queueHandler)
 logging.getLogger('requests').setLevel(logging.INFO)
 logger = logging.getLogger('forrestbot')
 
@@ -211,3 +220,12 @@ if __name__ == "__main__":
     except Exception:
         logger.exception("Releasetaggerbot crashed while processing messages")
         raise
+    finally:
+        if not errorQueue.empty():
+            errorQueue.put(None)
+            sys.stderr.write("\n\nReleasetaggerbot reported the following errors during execution:\n")
+            error_dumper = logging.StreamHandler(sys.stderr)
+            for error in iter(errorQueue.get, None):
+                error_dumper.emit(error)
+            sys.stderr.write("\n\n\n")
+            raise Exception("Forrestbot finished with Errors logged.")
