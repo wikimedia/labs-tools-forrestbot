@@ -190,8 +190,8 @@ def main():
         except legophab.PhabricatorException as e:
             # Security bug? T101133
             logger.error(description)
-            logger.error('Unable to get information about T%i, maybe it is private?', task, e)
-            raise
+            logger.error('Unable to get information about T%i, maybe it is private?', task, exc_info=e)
+            continue
 
         old_projs = set(task_info['projectPHIDs'])
         logger.debug("Existing PHIDs: {old_projs}".format(old_projs=old_projs))
@@ -204,8 +204,8 @@ def main():
                 })
             except legophab.PhabricatorException as e:
                 logger.error(description)
-                logger.error('Unable to update T%i, maybe it is read-only?', task, e)
-                raise
+                logger.error('Unable to update T%i, maybe it is read-only?', task, exc_info=e)
+                continue
         else:
             logging.info(
                 "Skipping T{task}; no new projects to add".format(task=task)
@@ -223,9 +223,10 @@ if __name__ == "__main__":
     finally:
         if not errorQueue.empty():
             errorQueue.put(None)
-            sys.stderr.write("\n\nReleasetaggerbot reported the following errors during execution:\n")
-            error_dumper = logging.StreamHandler(sys.stderr)
+            logger.info("[ ERROR SUMMARY ]".center(80, "-"))
+            logger.info("Releasetaggerbot reported the following errors during execution:")
+            error_dumper = logging.StreamHandler(sys.stdout)
             for error in iter(errorQueue.get, None):
-                error_dumper.emit(error)
-            sys.stderr.write("\n\n\n")
+                logger.info(error.getMessage())
+            logger.info("-"*80)
             raise Exception("Forrestbot finished with Errors logged.")
