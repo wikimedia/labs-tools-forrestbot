@@ -4,6 +4,10 @@ import config
 import logging
 import gerrit_rest
 
+# monkey patch max line length for poplib
+# as gmail sometimes sends > 2048 char lines
+poplib._MAXLINE = 4096
+
 logger = logging.getLogger('pop3bot')
 
 
