@@ -144,3 +144,8 @@ def test_not_merge():
         pytest.fail()
     except forrestbot.SkipMailException as exc:
         assert str(exc) == "Not a merge email"
+
+
+def test_parse_with_mixed_crlf_lf_newlines():
+    mail = list(pop3bot.gerritmail_generator(FakeMailbox('mixed_crlf_lf_newline.mbox')))[0]
+    assert mail['Gerrit-Project'] == 'mediawiki/tools/release'
