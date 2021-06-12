@@ -48,6 +48,14 @@ def message_generator(mailbox):
         yield mail, payload.decode('utf-8', 'replace')
 
 
+def get_gerrit_data_from_contents(contents):
+    for line in contents.split('\n'):
+        if ': ' in line:
+            key, value = line.split(': ', 1)
+            if key.startswith('Gerrit-') or key in ['Bug', 'Task', 'Closes']:
+                yield key, value.rstrip()
+
+
 def gerritmail_generator(mailbox):
     for message, contents in message_generator(mailbox):
         if 'gerrit@wikimedia.org' not in message.get('From', ''):
@@ -60,18 +68,8 @@ def gerritmail_generator(mailbox):
             (k, v) for (k, v) in message.items()
             if k.startswith('X-Gerrit')
         )
-        gerrit_data.update(dict(
-            line.split(": ", 1)
-            for line in contents.split('\n')
-            if (
-                line.startswith("Gerrit-") or
-                line.startswith('Bug:') or
-                line.startswith('Task:') or
-                line.startswith('Closes:')
-            ) and (
-                ": " in line
-            )
-        ))
+
+        gerrit_data.update(dict(get_gerrit_data_from_contents(contents)))
 
         if gerrit_data:
             yield gerrit_data
