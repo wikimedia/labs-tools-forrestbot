@@ -102,14 +102,14 @@ def test_mw_core_master():
     assert re.match(r"mw\d+\.\d+\.\d+-wmf\.\d+", result['slugs'][0])
 
 
-@pytest.mark.xfail
 def test_mw_core_REL_branch():
-    pytest.fail("No example email found yet")
-
     mail = list(pop3bot.gerritmail_generator(FakeMailbox('mw_core_REL_branch.mbox')))[0]
     result = forrestbot.process_mail(mail)
 
-    assert result is not None
+    assert result['branch'] == 'REL1_23'
+    assert result['task'] == 100141
+    assert result['url'] == 'https://gerrit.wikimedia.org/r/213344'
+    assert result['slugs'] == ['mw1.23']
 
 
 def test_mw_core_wmf_branch():
