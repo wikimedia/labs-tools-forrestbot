@@ -1,0 +1,106 @@
+Delivered-To: forrestbot@gmail.com
+Received: by 10.112.202.134 with SMTP id ki6csp1480073lbc;
+        Mon, 8 Jun 2015 09:04:55 -0700 (PDT)
+X-Received: by 10.55.43.130 with SMTP id r2mr33877841qkr.14.1433779495471;
+        Mon, 08 Jun 2015 09:04:55 -0700 (PDT)
+Return-Path: <mediawiki-commits-bounces@lists.wikimedia.org>
+Received: from lists.wikimedia.org (lists.wikimedia.org. [208.80.154.4])
+        by mx.google.com with ESMTP id z108si2947126qge.74.2015.06.08.09.04.54;
+        Mon, 08 Jun 2015 09:04:55 -0700 (PDT)
+Received-SPF: pass (google.com: domain of mediawiki-commits-bounces@lists.wikimedia.org designates 208.80.154.4 as permitted sender) client-ip=208.80.154.4;
+Authentication-Results: mx.google.com;
+       spf=pass (google.com: domain of mediawiki-commits-bounces@lists.wikimedia.org designates 208.80.154.4 as permitted sender) smtp.mail=mediawiki-commits-bounces@lists.wikimedia.org;
+       dkim=pass header.i=@lists.wikimedia.org;
+       dmarc=pass (p=NONE dis=NONE) header.from=wikimedia.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lists.wikimedia.org; s=wikimedia;
+	h=Sender:Content-Transfer-Encoding:Content-Type:List-Subscribe:List-Help:List-Post:List-Unsubscribe:List-Id:Reply-To:Subject:Cc:Message-Id:MIME-Version:References:In-Reply-To:To:From:Date; bh=cZkqpUraPaTUJTP1ZQh715SlNaSUxMReOP8FboYRmoY=;
+	b=HWMp31bJ4OpAVDsMfD6kmp0Cs/MJQvM5BUnGm+ujeZnvFnCshOrUQJbIJubIXDfJWU6Kj47lX5uW6C+AXYmJdjHlw0byOClniDmZKN9nOmqccXxONFHmynt4doItPkOAD92S11G0+qCnEQYUCId6F9uScIQiV/Npop22DPOFQ9U=;
+Received: from localhost ([::1]:41973 helo=sodium.wikimedia.org)
+	by sodium.wikimedia.org with esmtp (Exim 4.71)
+	(envelope-from <mediawiki-commits-bounces@lists.wikimedia.org>)
+	id 1Z1zXh-0004JX-VZ; Mon, 08 Jun 2015 16:04:54 +0000
+Received: from polonium.wikimedia.org ([2620:0:861:3:208:80:154:90]:49905)
+	by sodium.wikimedia.org with esmtp (Exim 4.71)
+	(envelope-from <gerrit@wikimedia.org>) id 1Z1zXg-0004JD-Io
+	for mediawiki-commits@lists.wikimedia.org;
+	Mon, 08 Jun 2015 16:04:52 +0000
+Received: from ytterbium.wikimedia.org ([208.80.154.80]:49650
+	helo=208.80.154.80) by polonium.wikimedia.org with esmtp (Exim 4.82)
+	(envelope-from <gerrit@wikimedia.org>)
+	id 1Z1zXf-00096T-C2; Mon, 08 Jun 2015 16:04:51 +0000
+Date: Mon, 8 Jun 2015 16:04:51 +0000
+From: "jenkins-bot (Code Review)" <gerrit@wikimedia.org>
+To: =?UTF-8?Q?Gerg=C5=91_Tisza?= <gtisza@wikimedia.org>
+X-Gerrit-MessageType: merged
+X-Gerrit-Change-Id: I893f8b93e09f9ef70beef46922d304fdb3600b78
+X-Gerrit-ChangeURL: <https://gerrit.wikimedia.org/r/213344>
+X-Gerrit-Commit: 410c51ca5a05f2184015f45c1967e052e0a1584e
+In-Reply-To: <gerrit.1432496372000.I893f8b93e09f9ef70beef46922d304fdb3600b78@gerrit.wikimedia.org>
+References: <gerrit.1432496372000.I893f8b93e09f9ef70beef46922d304fdb3600b78@gerrit.wikimedia.org>
+MIME-Version: 1.0
+Content-Disposition: inline
+User-Agent: Gerrit/2.8.1-4-ga1048ce
+Message-Id: <E1Z1zXf-00096T-C2@polonium.wikimedia.org>
+Cc: Gilles <gdubuc@wikimedia.org>, Chad <chadh@wikimedia.org>,
+	BryanDavis <bdavis@wikimedia.org>
+Subject: [MediaWiki-commits] [Gerrit] Add a hook for reporting exceptions -
+	change (mediawiki/core)
+X-BeenThere: mediawiki-commits@lists.wikimedia.org
+X-Mailman-Version: 2.1.13
+Precedence: list
+Reply-To: wikitech-l@lists.wikimedia.org
+List-Id: MediaWiki gerrit commits <mediawiki-commits.lists.wikimedia.org>
+List-Unsubscribe: <https://lists.wikimedia.org/mailman/options/mediawiki-commits>,
+	<mailto:mediawiki-commits-request@lists.wikimedia.org?subject=unsubscribe>
+List-Post: <mailto:mediawiki-commits@lists.wikimedia.org>
+List-Help: <mailto:mediawiki-commits-request@lists.wikimedia.org?subject=help>
+List-Subscribe: <https://lists.wikimedia.org/mailman/listinfo/mediawiki-commits>,
+	<mailto:mediawiki-commits-request@lists.wikimedia.org?subject=subscribe>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+Sender: mediawiki-commits-bounces@lists.wikimedia.org
+Errors-To: mediawiki-commits-bounces@lists.wikimedia.org
+
+amVua2lucy1ib3QgaGFzIHN1Ym1pdHRlZCB0aGlzIGNoYW5nZSBhbmQgaXQgd2FzIG1lcmdlZC4K
+CkNoYW5nZSBzdWJqZWN0OiBBZGQgYSBob29rIGZvciByZXBvcnRpbmcgZXhjZXB0aW9ucwouLi4u
+Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
+Li4uLi4uLi4uCgoKQWRkIGEgaG9vayBmb3IgcmVwb3J0aW5nIGV4Y2VwdGlvbnMKCkJ1ZzogVDEw
+MDE0MQpDaGFuZ2UtSWQ6IEk4OTNmOGI5M2UwOWY5ZWY3MGJlZWY0NjkyMmQzMDRmZGIzNjAwYjc4
+CihjaGVycnkgcGlja2VkIGZyb20gY29tbWl0IGQwZDUzOWU2YmFlMWQ1YjMzMzgyOGFkMzQ2ZWFk
+ZWYzMzk5ZjVmYjEpCi0tLQpNIGRvY3MvaG9va3MudHh0Ck0gaW5jbHVkZXMvZXhjZXB0aW9uL01X
+RXhjZXB0aW9uSGFuZGxlci5waHAKMiBmaWxlcyBjaGFuZ2VkLCA3IGluc2VydGlvbnMoKyksIDAg
+ZGVsZXRpb25zKC0pCgpBcHByb3ZhbHM6CiAgQ2hhZDogTG9va3MgZ29vZCB0byBtZSwgYXBwcm92
+ZWQKICBqZW5raW5zLWJvdDogVmVyaWZpZWQKCgoKZGlmZiAtLWdpdCBhL2RvY3MvaG9va3MudHh0
+IGIvZG9jcy9ob29rcy50eHQKaW5kZXggMzM4OTM2Zi4uZDlmZjNhNiAxMDA2NDQKLS0tIGEvZG9j
+cy9ob29rcy50eHQKKysrIGIvZG9jcy9ob29rcy50eHQKQEAgLTE2MzEsNiArMTYzMSwxMSBAQAog
+ICAgICImbHQ7ZGl2IC4uLj4kMSZsdDsvZGl2PiIpLgogICAtIGZsYWdzIEludGVnZXIgZGlzcGxh
+eSBmbGFncyAoTk9fQUNUSU9OX0xJTkssTk9fRVhUUkFfVVNFUl9MSU5LUykKIAorJ0xvZ0V4Y2Vw
+dGlvbic6IENhbGxlZCBiZWZvcmUgYW4gZXhjZXB0aW9uIChvciBQSFAgZXJyb3IpIGlzIGxvZ2dl
+ZC4gVGhpcyBpcyBtZWFudCBmb3IgaW50ZWdyYXRpb24KK3dpdGggZXh0ZXJuYWwgZXJyb3IgYWdn
+cmVnYXRpb24gc2VydmljZXM7IHJldHVybmluZyBmYWxzZSB3aWxsIE5PVCBwcmV2ZW50IGxvZ2dp
+bmcuCiskZTogVGhlIGV4Y2VwdGlvbiAoaW4gY2FzZSBvZiBhIHBsYWluIG9sZCBQSFAgZXJyb3Is
+IGEgd3JhcHBpbmcgRXJyb3JFeGNlcHRpb24pCiskc3VwcHJlc3NlZDogdHJ1ZSBpZiB0aGUgZXJy
+b3Igd2FzIHN1cHByZXNzZWQgdmlhIGVycm9yX3JlcG9ydGluZygpL3dmU3VwcHJlc3NXYXJuaW5n
+cygpCisKICdMb2dpbkF1dGhlbnRpY2F0ZUF1ZGl0JzogQSBsb2dpbiBhdHRlbXB0IGZvciBhIHZh
+bGlkIHVzZXIgYWNjb3VudCBlaXRoZXIKIHN1Y2NlZWRlZCBvciBmYWlsZWQuIE5vIHJldHVybiBk
+YXRhIGlzIGFjY2VwdGVkOyB0aGlzIGhvb2sgaXMgZm9yIGF1ZGl0aW5nIG9ubHkuCiAkdXNlcjog
+dGhlIFVzZXIgb2JqZWN0IGJlaW5nIGF1dGhlbnRpY2F0ZWQgYWdhaW5zdApkaWZmIC0tZ2l0IGEv
+aW5jbHVkZXMvZXhjZXB0aW9uL01XRXhjZXB0aW9uSGFuZGxlci5waHAgYi9pbmNsdWRlcy9leGNl
+cHRpb24vTVdFeGNlcHRpb25IYW5kbGVyLnBocAppbmRleCA4YzdmMDVjLi42OTk5MDBlIDEwMDY0
+NAotLS0gYS9pbmNsdWRlcy9leGNlcHRpb24vTVdFeGNlcHRpb25IYW5kbGVyLnBocAorKysgYi9p
+bmNsdWRlcy9leGNlcHRpb24vTVdFeGNlcHRpb25IYW5kbGVyLnBocApAQCAtMzYzLDYgKzM2Myw4
+IEBACiAJCQlpZiAoICRqc29uICE9PSBmYWxzZSApIHsKIAkJCQl3ZkRlYnVnTG9nKCAnZXhjZXB0
+aW9uLWpzb24nLCAkanNvbiwgJ3ByaXZhdGUnICk7CiAJCQl9CisKKwkJCUhvb2tzOjpydW4oICdM
+b2dFeGNlcHRpb24nLCBhcnJheSggJGUsIGZhbHNlICkgKTsKIAkJfQogCiAJfQoKLS0gClRvIHZp
+ZXcsIHZpc2l0IGh0dHBzOi8vZ2Vycml0Lndpa2ltZWRpYS5vcmcvci8yMTMzNDQKVG8gdW5zdWJz
+Y3JpYmUsIHZpc2l0IGh0dHBzOi8vZ2Vycml0Lndpa2ltZWRpYS5vcmcvci9zZXR0aW5ncwoKR2Vy
+cml0LU1lc3NhZ2VUeXBlOiBtZXJnZWQKR2Vycml0LUNoYW5nZS1JZDogSTg5M2Y4YjkzZTA5Zjll
+ZjcwYmVlZjQ2OTIyZDMwNGZkYjM2MDBiNzgKR2Vycml0LVBhdGNoU2V0OiAyCkdlcnJpdC1Qcm9q
+ZWN0OiBtZWRpYXdpa2kvY29yZQpHZXJyaXQtQnJhbmNoOiBSRUwxXzIzCkdlcnJpdC1Pd25lcjog
+R2VyZ8WRIFRpc3phIDxndGlzemFAd2lraW1lZGlhLm9yZz4KR2Vycml0LVJldmlld2VyOiBCcnlh
+bkRhdmlzIDxiZGF2aXNAd2lraW1lZGlhLm9yZz4KR2Vycml0LVJldmlld2VyOiBDaGFkIDxjaGFk
+aEB3aWtpbWVkaWEub3JnPgpHZXJyaXQtUmV2aWV3ZXI6IEdpbGxlcyA8Z2R1YnVjQHdpa2ltZWRp
+YS5vcmc+CkdlcnJpdC1SZXZpZXdlcjogamVua2lucy1ib3QgPD4KCl9fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCk1lZGlhV2lraS1jb21taXRzIG1haWxpbmcg
+bGlzdApNZWRpYVdpa2ktY29tbWl0c0BsaXN0cy53aWtpbWVkaWEub3JnCmh0dHBzOi8vbGlzdHMu
+d2lraW1lZGlhLm9yZy9tYWlsbWFuL2xpc3RpbmZvL21lZGlhd2lraS1jb21taXRzCg==
