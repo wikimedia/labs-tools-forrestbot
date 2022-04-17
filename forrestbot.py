@@ -223,10 +223,11 @@ if __name__ == "__main__":
     finally:
         if not errorQueue.empty():
             errorQueue.put(None)
-            logger.info("[ ERROR SUMMARY ]".center(80, "-"))
-            logger.info("Releasetaggerbot reported the following errors during execution:")
+            errlogger = logging.getLogger('errorsummary')
+            errlogger.info("[ ERROR SUMMARY ]".center(80, "-"))
+            errlogger.info("Releasetaggerbot reported the following errors during execution:")
             error_dumper = logging.StreamHandler(sys.stdout)
             for error in iter(errorQueue.get, None):
-                logger.info(error.getMessage())
-            logger.info("-"*80)
+                errlogger.info(error.getMessage())
+            errlogger.info("-"*80)
             raise Exception("Forrestbot finished with Errors logged.")

@@ -1,0 +1,6 @@
+---
+- name: releasetaggerbot
+  command: forrestbot/forrestbot.sh
+  image: tf-python39
+  schedule: "0 * * * *"
+
