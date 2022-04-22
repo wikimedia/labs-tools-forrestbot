@@ -4,10 +4,14 @@ from email.message import EmailMessage
 
 errlog = open('forrestbot.log').readlines()
 
-errortext = "".join(
-    line.split("INFO - ", 1)[-1]
-    for line in errlog[-100:]
-    if "errorsummary" in line)
+errorlines = []
+for line in errlog:
+    if "ERROR SUMMARY" in line:
+        errorlines = [line]
+    else:
+        errorlines.append(line)
+
+errortext = "".join(errorlines[-100:])
 
 message = f"""Dear friends of ReleaseTaggerBot,
 
