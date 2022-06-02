@@ -1,5 +1,6 @@
 username = 'gmail username'
 password = 'gmail password'
+pophost = 'pop.gmail.com'
 
 PHAB_HOST = 'https://phabricator.wikimedia.org'
 PHAB_USER = 'phabricator user'
