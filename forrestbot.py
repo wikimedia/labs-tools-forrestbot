@@ -166,6 +166,9 @@ def main():
             logger.debug("%s: skipping (%r)" % (mail['X-Gerrit-ChangeURL'], e))
             pass
 
+        if i > 500:
+            break
+
     # after parsing all entries, make sure we only do a single edit per Task.
     def key(x):
         return x['task']
