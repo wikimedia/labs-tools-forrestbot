@@ -58,12 +58,6 @@ def get_gerrit_data_from_contents(contents):
 
 def gerritmail_generator(mailbox):
     for message, contents in message_generator(mailbox):
-        if 'gerrit@wikimedia.org' not in message.get('From', ''):
-            logger.debug(
-                'Skipping message from %s' % message.get('From', '???')
-            )
-            continue
-
         gerrit_data = dict(
             (k, v) for (k, v) in message.items()
             if k.startswith('X-Gerrit')
